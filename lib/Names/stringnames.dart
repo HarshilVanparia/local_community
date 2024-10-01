@@ -8,6 +8,9 @@ class AppColors {
   static const Color txtColor = Color(0xFFFFFFFF); // hex color #FFFFFF
   static const Color lineColor =
       Color.fromARGB(130, 245, 196, 104); // hex color #F5C468
+  static const Color graybox = Color.fromARGB(136, 255, 255, 255); // hex color #FFFFFF
+  static const Color commentbox = Color.fromARGB(41, 255, 255, 255); // hex color #FFFFFF
+  
 }
 
 class AppTitles {
@@ -15,5 +18,6 @@ class AppTitles {
   static const String appTitle = "Local Community";
   static const String explore = "Explore";
   static const String readmore = "Read More";
+  static const String comment = "Comment here...";
 }
 
