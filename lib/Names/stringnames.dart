@@ -21,3 +21,14 @@ class AppTitles {
   static const String comment = "Comment here...";
 }
 
+
+class categoriesTitles{
+  static const String iot = "Iot";
+  static const String ele = "Electroincs";
+  static const String circuit = "Circuit";
+  static const String printing = "3D Printing";
+  static const String design = "Custom Design";
+  static const String art = "Art";
+  static const String herbs = "Herbs";
+  static const String led = "Strip Led";
+}

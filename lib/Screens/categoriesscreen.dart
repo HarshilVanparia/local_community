@@ -19,34 +19,33 @@ class Categoriesscreen extends StatefulWidget {
   State<Categoriesscreen> createState() => _CategoriesscreenState();
 }
 
-class _CategoriesscreenState extends State<Categoriesscreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  bool isMenuOpen = false;
+class _CategoriesscreenState extends State<Categoriesscreen> {
+  // late AnimationController _controller;
+  // bool isMenuOpen = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _controller = AnimationController(
+  //     duration: const Duration(milliseconds: 300),
+  //     vsync: this,
+  //   );
+  // }
 
-  void toggleMenu() {
-    if (mounted) {
-      setState(() {
-        isMenuOpen = !isMenuOpen;
-        isMenuOpen ? _controller.forward() : _controller.reverse();
-      });
-    }
-  }
+  // void toggleMenu() {
+  //   if (mounted) {
+  //     setState(() {
+  //       isMenuOpen = !isMenuOpen;
+  //       isMenuOpen ? _controller.forward() : _controller.reverse();
+  //     });
+  //   }
+  // }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _controller.dispose();
+  //   super.dispose();
+  // }
 
   final List<Map<String, String>> items = [
     {'title': 'Electronics', 'icon': category1},
@@ -90,115 +89,10 @@ class _CategoriesscreenState extends State<Categoriesscreen>
                 ],
               ),
             ),
-
-            // Buttons positioned in a half-circle
-            if (isMenuOpen)
-              Positioned.fill(
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    for (var i = 0; i < 6; i++) _buildCircularMenuButton(i),
-                  ],
-                ),
-              ),
-            // Central Floating Action Button to Toggle Menu
-            Positioned(
-              bottom: 20, // Centralize at the bottom
-              left: MediaQuery.of(context).size.width / 2 - 30,
-              child: FloatingActionButton(
-                onPressed: toggleMenu,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: Icon(
-                    isMenuOpen ? Icons.close : Icons.menu,
-                    size: 28,
-                    key: ValueKey<bool>(isMenuOpen),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
     );
-  }
-
-  // Method to create circular menu buttons in a semi-circle
-  Widget _buildCircularMenuButton(int index) {
-    // Number of buttons in the half-circle
-    final numberOfButtons = 6;
-    final double radius = 120; // Radius of the half-circle
-
-    // Calculate the angle in radians
-    double angle = pi / (numberOfButtons - 1) * index;
-
-    // Calculate the x and y positions using trigonometry
-    double x = cos(angle) * radius;
-    double y = sin(angle) * radius;
-
-    // Positioned widget to place each button
-    return Positioned(
-      bottom: 80 + y,
-      left: MediaQuery.of(context).size.width / 2 - 30 + x,
-      child: CircularMenuButton(
-        icon: _getIconForButton(index),
-        onPressed: () {
-          if (mounted) {
-            if (index == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            } else if (index == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            } else if (index == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            } else if (index == 3) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            } else if (index == 4) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            } else if (index == 5) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            }
-          }
-        },
-      ),
-    );
-  }
-
-  // Define icons for each button
-  IconData _getIconForButton(int index) {
-    switch (index) {
-      case 0:
-        return Icons.build;
-      case 1:
-        return Icons.dashboard;
-      case 2:
-        return Icons.gamepad;
-      case 3:
-        return Icons.settings;
-      case 4:
-        return Icons.home;
-      case 5:
-        return Icons.person;
-      default:
-        return Icons.home;
-    }
   }
 }
 
@@ -213,32 +107,356 @@ class Categories_List extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 20),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
+                    TextButton(
                       onPressed: () {},
-                      icon: CircleAvatar(
-                        radius: 30, // radius as required
-                        backgroundColor: AppColors.primaryColor,
-                        child: ClipOval(
-                          child: Image.asset(
-                            iot,
-                            fit: BoxFit.cover,
-                            width: 38, 
-                            height: 38,
+                      child: Container(
+                        width: 152,
+                        height: 152,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            style: BorderStyle.solid,
+                            color: AppColors.primaryColor,
+                            width: 2,
                           ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment
+                              .spaceEvenly, // for inside icon & text
+                          children: [
+                            CircleAvatar(
+                              radius: 30, // radius as required
+                              backgroundColor: AppColors.primaryColor,
+                              child: Image.asset(
+                                iot,
+                                fit: BoxFit
+                                    .cover, // Ensures the whole image is visible
+                                width: 38, // Adjust based on the size you need
+                                height: 38,
+                              ),
+                            ),
+                            Text(
+                              categoriesTitles.iot,
+                              style: TextStyle(
+                                color: AppColors.txtColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    )
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Container(
+                        width: 152,
+                        height: 152,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            style: BorderStyle.solid,
+                            color: AppColors.primaryColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CircleAvatar(
+                              radius: 30, // radius as required
+                              backgroundColor: AppColors.primaryColor,
+                              child: Image.asset(
+                                ele,
+                                fit: BoxFit
+                                    .cover, // Ensures the whole image is visible
+                                width: 38, // Adjust based on the size you need
+                                height: 38,
+                              ),
+                            ),
+                            Text(
+                              categoriesTitles.ele,
+                              style: TextStyle(
+                                color: AppColors.txtColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
-                )
+                ), // row 1 end
+                SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () {},
+                      child: Container(
+                        width: 152,
+                        height: 152,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            style: BorderStyle.solid,
+                            color: AppColors.primaryColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment
+                              .spaceEvenly, // for inside icon & text
+                          children: [
+                            CircleAvatar(
+                              radius: 30, // radius as required
+                              backgroundColor: AppColors.primaryColor,
+                              child: Image.asset(
+                                circuit,
+                                fit: BoxFit
+                                    .cover, // Ensures the whole image is visible
+                                width: 38, // Adjust based on the size you need
+                                height: 38,
+                              ),
+                            ),
+                            Text(
+                              categoriesTitles.circuit,
+                              style: TextStyle(
+                                color: AppColors.txtColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Container(
+                        width: 152,
+                        height: 152,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            style: BorderStyle.solid,
+                            color: AppColors.primaryColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CircleAvatar(
+                              radius: 30, // radius as required
+                              backgroundColor: AppColors.primaryColor,
+                              child: Image.asset(
+                                printing,
+                                fit: BoxFit
+                                    .cover, // Ensures the whole image is visible
+                                width: 38, // Adjust based on the size you need
+                                height: 38,
+                              ),
+                            ),
+                            Text(
+                              categoriesTitles.printing,
+                              style: TextStyle(
+                                color: AppColors.txtColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ), // row 2 end
+                SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () {},
+                      child: Container(
+                        width: 152,
+                        height: 152,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            style: BorderStyle.solid,
+                            color: AppColors.primaryColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment
+                              .spaceEvenly, // for inside icon & text
+                          children: [
+                            CircleAvatar(
+                              radius: 30, // radius as required
+                              backgroundColor: AppColors.primaryColor,
+                              child: Image.asset(
+                                csdesign,
+                                fit: BoxFit
+                                    .cover, // Ensures the whole image is visible
+                                width: 38, // Adjust based on the size you need
+                                height: 38,
+                              ),
+                            ),
+                            Text(
+                              categoriesTitles.design,
+                              style: TextStyle(
+                                color: AppColors.txtColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Container(
+                        width: 152,
+                        height: 152,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            style: BorderStyle.solid,
+                            color: AppColors.primaryColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CircleAvatar(
+                              radius: 30, // radius as required
+                              backgroundColor: AppColors.primaryColor,
+                              child: Image.asset(
+                                art,
+                                fit: BoxFit
+                                    .cover, // Ensures the whole image is visible
+                                width: 38, // Adjust based on the size you need
+                                height: 38,
+                              ),
+                            ),
+                            Text(
+                              categoriesTitles.art,
+                              style: TextStyle(
+                                color: AppColors.txtColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ), // row 3 end
+                SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () {},
+                      child: Container(
+                        width: 152,
+                        height: 152,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            style: BorderStyle.solid,
+                            color: AppColors.primaryColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment
+                              .spaceEvenly, // for inside icon & text
+                          children: [
+                            CircleAvatar(
+                              radius: 30, // radius as required
+                              backgroundColor: AppColors.primaryColor,
+                              child: Image.asset(
+                                herb,
+                                fit: BoxFit
+                                    .cover, // Ensures the whole image is visible
+                                width: 38, // Adjust based on the size you need
+                                height: 38,
+                              ),
+                            ),
+                            Text(
+                              categoriesTitles.herbs,
+                              style: TextStyle(
+                                color: AppColors.txtColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Container(
+                        width: 152,
+                        height: 152,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            style: BorderStyle.solid,
+                            color: AppColors.primaryColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CircleAvatar(
+                              radius: 30, // radius as required
+                              backgroundColor: AppColors.primaryColor,
+                              child: Image.asset(
+                                strip,
+                                fit: BoxFit
+                                    .cover, // Ensures the whole image is visible
+                                width: 38, // Adjust based on the size you need
+                                height: 38,
+                              ),
+                            ),
+                            Text(
+                              categoriesTitles.led,
+                              style: TextStyle(
+                                color: AppColors.txtColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ), // row 4 end
+                SizedBox(
+                  height: 8,
+                ),
               ],
             ),
           ],
