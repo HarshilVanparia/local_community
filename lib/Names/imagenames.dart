@@ -3,6 +3,8 @@ const String wing = "assets/wing.png";
 const String google = "assets/Google.png";
 const String futureProduct1 = "assets/Hasthip.png";
 const String futureProduct2 = "assets/Bitdefender.png";
+const String product1 = "assets/orange.png";
+const String product2 = "assets/white.png";
 const String user = "assets/zoro.jpg";
 const String post = "assets/post1.png";
 
@@ -18,3 +20,6 @@ const String csdesign = "assets/categories/custom.png";
 const String art = "assets/categories/art.png";
 const String herb = "assets/categories/herb.png";
 const String strip = "assets/categories/strip.png";
+
+const String esp32 = "assets/bloth.png";
+const String espwroom = "assets/esp.png";

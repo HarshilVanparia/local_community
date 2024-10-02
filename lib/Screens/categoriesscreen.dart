@@ -1,58 +1,16 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
-import 'package:local_community/Screens/homescreen.dart';
-import 'package:local_community/Screens/loginscreen.dart';
+import 'package:local_community/Screens/productsscreen.dart';
 
 class Categoriesscreen extends StatefulWidget {
-  final String categoryTitle;
-  final String iconPath;
-  const Categoriesscreen({
-    Key? key,
-    required this.categoryTitle,
-    required this.iconPath,
-  }) : super(key: key);
+  const Categoriesscreen({super.key});
 
   @override
   State<Categoriesscreen> createState() => _CategoriesscreenState();
 }
 
 class _CategoriesscreenState extends State<Categoriesscreen> {
-  // late AnimationController _controller;
-  // bool isMenuOpen = false;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _controller = AnimationController(
-  //     duration: const Duration(milliseconds: 300),
-  //     vsync: this,
-  //   );
-  // }
-
-  // void toggleMenu() {
-  //   if (mounted) {
-  //     setState(() {
-  //       isMenuOpen = !isMenuOpen;
-  //       isMenuOpen ? _controller.forward() : _controller.reverse();
-  //     });
-  //   }
-  // }
-
-  // @override
-  // void dispose() {
-  //   _controller.dispose();
-  //   super.dispose();
-  // }
-
-  final List<Map<String, String>> items = [
-    {'title': 'Electronics', 'icon': category1},
-    {'title': 'IOT', 'icon': category2},
-    {'title': 'Circuit', 'icon': category3},
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +42,7 @@ class _CategoriesscreenState extends State<Categoriesscreen> {
                 children: [
                   SizedBox(height: 8),
                   Categories_Title(),
-                  Categories_List(items: items),
+                  Categories_Items(),
                   SizedBox(height: 8),
                 ],
               ),
@@ -96,13 +54,8 @@ class _CategoriesscreenState extends State<Categoriesscreen> {
   }
 }
 
-class Categories_List extends StatelessWidget {
-  const Categories_List({
-    super.key,
-    required this.items,
-  });
-
-  final List<Map<String, String>> items;
+class Categories_Items extends StatelessWidget {
+  const Categories_Items({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +69,13 @@ class Categories_List extends StatelessWidget {
                 Row(
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductsScreen(),
+                            ));
+                      },
                       child: Container(
                         width: 152,
                         height: 152,
@@ -156,7 +115,13 @@ class Categories_List extends StatelessWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductsScreen(),
+                            ));
+                      },
                       child: Container(
                         width: 152,
                         height: 152,
@@ -202,7 +167,13 @@ class Categories_List extends StatelessWidget {
                 Row(
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductsScreen(),
+                            ));
+                      },
                       child: Container(
                         width: 152,
                         height: 152,
@@ -242,7 +213,13 @@ class Categories_List extends StatelessWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductsScreen(),
+                            ));
+                      },
                       child: Container(
                         width: 152,
                         height: 152,
@@ -288,7 +265,13 @@ class Categories_List extends StatelessWidget {
                 Row(
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductsScreen(),
+                            ));
+                      },
                       child: Container(
                         width: 152,
                         height: 152,
@@ -328,7 +311,13 @@ class Categories_List extends StatelessWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductsScreen(),
+                            ));
+                      },
                       child: Container(
                         width: 152,
                         height: 152,
@@ -374,7 +363,13 @@ class Categories_List extends StatelessWidget {
                 Row(
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductsScreen(),
+                            ));
+                      },
                       child: Container(
                         width: 152,
                         height: 152,
@@ -414,7 +409,13 @@ class Categories_List extends StatelessWidget {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductsScreen(),
+                            ));
+                      },
                       child: Container(
                         width: 152,
                         height: 152,
@@ -455,7 +456,7 @@ class Categories_List extends StatelessWidget {
                   ],
                 ), // row 4 end
                 SizedBox(
-                  height: 8,
+                  height: 18,
                 ),
               ],
             ),

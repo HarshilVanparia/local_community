@@ -3,10 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
+import 'package:local_community/Screens/allproductsscreen.dart';
 import 'package:local_community/Screens/bottomnav.dart';
 import 'package:local_community/Screens/categoriesscreen.dart';
 
 import 'package:local_community/Screens/loginscreen.dart';
+import 'package:local_community/Screens/productsscreen.dart';
 import 'package:local_community/Screens/registerscreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -93,7 +95,6 @@ class _HomSscreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            Bottomnav()
             // Buttons positioned in a half-circle
             // if (isMenuOpen)
             //   Positioned.fill(
@@ -454,15 +455,11 @@ class Categories_List extends StatelessWidget {
               style: TextStyle(fontSize: 18, color: AppColors.txtColor),
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Categoriesscreen(
-                    categoryTitle: items[index]['title']!,
-                    iconPath: items[index]['icon']!,
-                  ),
-                ),
-              );
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductsScreen(),
+                  ));
             },
           );
         },
@@ -492,7 +489,13 @@ class Categories_Title extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
           ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Categoriesscreen(),
+                  ));
+            },
             label: Text(
               AppTitles.explore,
               style: TextStyle(color: AppColors.backgroundColor),
@@ -541,11 +544,8 @@ class Future_Product_title extends StatelessWidget {
           ),
           ElevatedButton.icon(
             onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Products(),
-                  ));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => AllProductsScreen()));
             },
             label: Text(
               AppTitles.explore,
@@ -589,7 +589,7 @@ class Products extends StatelessWidget {
         crossAxisCount: 2, // Two items per row
         crossAxisSpacing: 8, // Horizontal spacing between cards
         mainAxisSpacing: 10, // Vertical spacing between cards
-        childAspectRatio: 0.59, // Controls height/width ratio to match design
+        childAspectRatio: 0.58, // Controls height/width ratio to match design
         children: [
           ProductCard(
             title: 'HASTHIP',
@@ -655,7 +655,7 @@ class ProductCard extends StatelessWidget {
                       Text(
                         title,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: AppColors.txtColor,
                         ),
@@ -675,7 +675,7 @@ class ProductCard extends StatelessWidget {
                 SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
-                  height: 50,
+                  height: 35,
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
