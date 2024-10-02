@@ -27,7 +27,6 @@ class _CategoriesscreenState extends State<Categoriesscreen> {
               SizedBox(width: 8),
               Text(
                 AppTitles.appTitle,
-                style: TextStyle(color: AppColors.txtColor),
               ),
             ],
           ),

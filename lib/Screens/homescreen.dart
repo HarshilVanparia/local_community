@@ -6,6 +6,7 @@ import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/allproductsscreen.dart';
 import 'package:local_community/Screens/bottomnav.dart';
 import 'package:local_community/Screens/categoriesscreen.dart';
+import 'package:local_community/Screens/communitypostscreen.dart';
 
 import 'package:local_community/Screens/loginscreen.dart';
 import 'package:local_community/Screens/productsscreen.dart';
@@ -68,7 +69,6 @@ class _HomSscreenState extends State<HomeScreen> {
               SizedBox(width: 8),
               Text(
                 AppTitles.appTitle,
-                style: TextStyle(color: AppColors.txtColor),
               ),
             ],
           ),
@@ -392,7 +392,12 @@ class Community_Posts_Title extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
           ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CommunityPostScreen()));
+            },
             label: Text(
               AppTitles.explore,
               style: TextStyle(color: AppColors.backgroundColor),

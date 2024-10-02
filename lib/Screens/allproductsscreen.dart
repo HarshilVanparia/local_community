@@ -26,7 +26,6 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
               SizedBox(width: 8),
               Text(
                 AppTitles.appTitle,
-                style: TextStyle(color: AppColors.txtColor),
               ),
             ],
           ),
@@ -84,7 +83,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                   SizedBox(
                     height: 28,
                   ),
-                  
+
                 ],
               ),
             ),

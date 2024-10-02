@@ -15,7 +15,9 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Local Community',
       theme: ThemeData(
-        appBarTheme: AppBarTheme(backgroundColor: AppColors.backgroundColor),
+        appBarTheme: AppBarTheme(
+            backgroundColor: AppColors.backgroundColor,
+            titleTextStyle: TextStyle(color: AppColors.txtColor)),
         scaffoldBackgroundColor: AppColors.backgroundColor,
         primaryColor: AppColors.backgroundColor,
         primaryTextTheme:

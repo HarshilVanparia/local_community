@@ -7,6 +7,7 @@ const String product1 = "assets/orange.png";
 const String product2 = "assets/white.png";
 const String user = "assets/zoro.jpg";
 const String post = "assets/post1.png";
+const String post2 = "assets/post2.png";
 
 const String category1 = "assets/c1.png";
 const String category2 = "assets/c2.png";

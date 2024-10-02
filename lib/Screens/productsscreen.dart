@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
-import 'package:local_community/Screens/homescreen.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -27,7 +26,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
               SizedBox(width: 8),
               Text(
                 AppTitles.appTitle,
-                style: TextStyle(color: AppColors.txtColor),
               ),
             ],
           ),
