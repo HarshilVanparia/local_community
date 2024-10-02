@@ -183,10 +183,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 18,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
                               height: 2,
-                              width: 200,
+                              width: 140,
                               child: Container(
                                 color: AppColors.lineColor,
                               )),
@@ -196,7 +197,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(
                               height: 2,
-                              width: 200,
+                              width: 140,
                               child: Container(
                                 color: AppColors.lineColor,
                               )),
