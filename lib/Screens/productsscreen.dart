@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
+import 'package:local_community/Screens/productdetailsscreen.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -177,7 +178,12 @@ class ProductCard extends StatelessWidget {
                   width: double.infinity,
                   height: 35,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductDetailsScreen()));
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           AppColors.primaryColor, // Color of the button

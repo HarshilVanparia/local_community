@@ -9,6 +9,7 @@ import 'package:local_community/Screens/categoriesscreen.dart';
 import 'package:local_community/Screens/communitypostscreen.dart';
 
 import 'package:local_community/Screens/loginscreen.dart';
+import 'package:local_community/Screens/productdetailsscreen.dart';
 import 'package:local_community/Screens/productsscreen.dart';
 import 'package:local_community/Screens/registerscreen.dart';
 
@@ -682,7 +683,12 @@ class ProductCard extends StatelessWidget {
                   width: double.infinity,
                   height: 35,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductDetailsScreen()));
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
                           AppColors.primaryColor, // Color of the button

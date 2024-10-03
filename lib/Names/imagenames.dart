@@ -9,6 +9,8 @@ const String user = "assets/zoro.jpg";
 const String post = "assets/post1.png";
 const String post2 = "assets/post2.png";
 
+const String whatsapp = "assets/whatsapp.png";
+
 const String category1 = "assets/c1.png";
 const String category2 = "assets/c2.png";
 const String category3 = "assets/c3.png";

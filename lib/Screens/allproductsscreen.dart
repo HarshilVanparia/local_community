@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
+import 'package:local_community/Screens/productdetailsscreen.dart';
 
 class AllProductsScreen extends StatefulWidget {
   const AllProductsScreen({super.key});
@@ -58,8 +59,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                         // Navigator.pushReplacement(
                         //     context,
                         //     MaterialPageRoute(
-                        //       builder: (context) => ,
-                        //     ));
+                        //         builder: (context) => ProductDetailsScreen()));
                       },
                       child: Text(
                         "UPLOAD YOUR OWN PRODUCT",
@@ -83,7 +83,6 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                   SizedBox(
                     height: 28,
                   ),
-
                 ],
               ),
             ),
@@ -398,7 +397,12 @@ class ProductCard extends StatelessWidget {
             width: double.infinity,
             height: 35,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProductDetailsScreen()));
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor, // Button color
                 shape: RoundedRectangleBorder(

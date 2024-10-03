@@ -19,6 +19,7 @@ class AppTitles {
   static const String explore = "Explore";
   static const String readmore = "Read More";
   static const String comment = "Comment here...";
+  static const String contact = "CONTACT";
 }
 
 
@@ -31,4 +32,13 @@ class categoriesTitles{
   static const String art = "Art";
   static const String herbs = "Herbs";
   static const String led = "Strip Led";
+}
+
+class productTitle{
+  static const String pdetails = "Product Details";
+  static const String pspec = "Product Specification:";
+  static const String pmodel = "Model Name:";
+  static const String pdescript = "Product Description";
+  static const String brand = "Brand";
+
 }

@@ -17,7 +17,10 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         appBarTheme: AppBarTheme(
             backgroundColor: AppColors.backgroundColor,
-            titleTextStyle: TextStyle(color: AppColors.txtColor)),
+            titleTextStyle: TextStyle(
+                color: AppColors.txtColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 20)),
         scaffoldBackgroundColor: AppColors.backgroundColor,
         primaryColor: AppColors.backgroundColor,
         primaryTextTheme:
