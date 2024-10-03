@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
+import 'package:local_community/Screens/homescreen.dart';
 
 class CommunityPostScreen extends StatefulWidget {
   const CommunityPostScreen({super.key});
@@ -18,6 +19,16 @@ class _CommunityPostScreenState extends State<CommunityPostScreen> {
           margin: EdgeInsets.fromLTRB(5, 8, 5, 8),
           child: Row(
             children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: AppColors.txtColor,
+                ),
+              ),
               Image.asset(
                 logo,
                 width: 50,
@@ -282,7 +293,7 @@ class Post2 extends StatelessWidget {
               width: double.infinity,
               height: 250,
               post2,
-              fit: BoxFit.contain,
+              fit: BoxFit.fill,
             ),
           ),
           Column(

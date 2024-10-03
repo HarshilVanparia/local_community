@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
+import 'package:local_community/Screens/homescreen.dart';
 import 'package:local_community/Screens/productdetailsscreen.dart';
+import 'package:local_community/Screens/uploadproductscreen.dart';
 
 class AllProductsScreen extends StatefulWidget {
   const AllProductsScreen({super.key});
@@ -19,6 +21,16 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
           margin: EdgeInsets.fromLTRB(5, 8, 5, 8),
           child: Row(
             children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: AppColors.txtColor,
+                ),
+              ),
               Image.asset(
                 logo,
                 width: 50,
@@ -56,10 +68,10 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                     margin: EdgeInsets.symmetric(horizontal: 14),
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => ProductDetailsScreen()));
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UploadProductScreen()));
                       },
                       child: Text(
                         "UPLOAD YOUR OWN PRODUCT",
@@ -107,7 +119,7 @@ class CircuitProdcutTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            categoriesTitles.iot,
+            categoriesTitles.circuit,
             style: TextStyle(
                 color: AppColors.txtColor,
                 fontSize: 20,

@@ -8,9 +8,10 @@ class AppColors {
   static const Color txtColor = Color(0xFFFFFFFF); // hex color #FFFFFF
   static const Color lineColor =
       Color.fromARGB(130, 245, 196, 104); // hex color #F5C468
-  static const Color graybox = Color.fromARGB(136, 255, 255, 255); // hex color #FFFFFF
-  static const Color commentbox = Color.fromARGB(41, 255, 255, 255); // hex color #FFFFFF
-  
+  static const Color graybox =
+      Color.fromARGB(136, 255, 255, 255); // hex color #FFFFFF
+  static const Color commentbox =
+      Color.fromARGB(41, 255, 255, 255); // hex color #FFFFFF
 }
 
 class AppTitles {
@@ -22,8 +23,7 @@ class AppTitles {
   static const String contact = "CONTACT";
 }
 
-
-class categoriesTitles{
+class categoriesTitles {
   static const String iot = "Iot";
   static const String ele = "Electroincs";
   static const String circuit = "Circuit";
@@ -34,11 +34,15 @@ class categoriesTitles{
   static const String led = "Strip Led";
 }
 
-class productTitle{
+class productTitle {
+  static const String ptitle = "Product Title";
   static const String pdetails = "Product Details";
   static const String pspec = "Product Specification:";
   static const String pmodel = "Model Name:";
   static const String pdescript = "Product Description";
   static const String brand = "Brand";
 
+  static const String pname = "Enter product name";
+  static const String pcategorytitle = "Product Category";
+  static const String pimg = "Product Image";
 }
