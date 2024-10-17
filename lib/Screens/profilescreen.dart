@@ -3,18 +3,17 @@ import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/allproductsscreen.dart';
 import 'package:local_community/Screens/categoriesscreen.dart';
+import 'package:local_community/Screens/communitypostscreen.dart';
 import 'package:local_community/Screens/homescreen.dart';
-import 'package:local_community/Screens/productdetailsscreen.dart';
-import 'package:local_community/Screens/profilescreen.dart';
 
-class ProductsScreen extends StatefulWidget {
-  const ProductsScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
   @override
-  State<ProductsScreen> createState() => _ProductsScreenState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProductsScreenState extends State<ProductsScreen>
+class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool isMenuOpen = false;
@@ -48,13 +47,15 @@ class _ProductsScreenState extends State<ProductsScreen>
     return Scaffold(
       appBar: AppBar(
         title: Container(
-          margin: EdgeInsets.fromLTRB(35, 8, 35, 8),
+          margin: EdgeInsets.fromLTRB(5, 8, 5, 8),
           child: Row(
             children: [
               IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                  // Navigator.pushReplacement(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => AllProductsScreen()));
                 },
                 icon: Icon(
                   Icons.arrow_back,
@@ -81,10 +82,13 @@ class _ProductsScreenState extends State<ProductsScreen>
             SingleChildScrollView(
               child: Column(
                 children: [
-                  Future_Product_title(),
                   SizedBox(height: 8),
-                  FutureProducts(),
-                  SizedBox(height: 100),
+                  Profile(),
+                  SizedBox(height: 16),
+                  SizedBox(height: 16),
+                  SizedBox(
+                    height: 100,
+                  ),
                 ],
               ),
             ),
@@ -157,7 +161,7 @@ class _ProductsScreenState extends State<ProductsScreen>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Community_Post()),
+                              builder: (context) => CommunityPostScreen()),
                         );
                       },
                     ),
@@ -219,6 +223,220 @@ class CircularMenuButton extends StatelessWidget {
   }
 }
 
+class Profile extends StatefulWidget {
+  const Profile({super.key});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                  width: 125,
+                  height: 125,
+                  child: CircleAvatar(backgroundImage: AssetImage(goku))),
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                "Sun Goku",
+                style: TextStyle(
+                    color: AppColors.txtColor,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.left,
+              ),
+              Prosonal(),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 2, color: AppColors.txtColor),
+                    color: AppColors.txtColor,
+                    borderRadius: BorderRadius.circular(6)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Email",
+                      style: TextStyle(
+                          color: AppColors.backgroundColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2, color: AppColors.backgroundColor),
+                          color: AppColors.backgroundColor,
+                          borderRadius: BorderRadius.circular(6)),
+                      child: Text(
+                        "hvanpariya647@rku.ac.in",
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Address",
+                      style: TextStyle(
+                          color: AppColors.backgroundColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2, color: AppColors.backgroundColor),
+                          color: AppColors.backgroundColor,
+                          borderRadius: BorderRadius.circular(6)),
+                      child: Text(
+                        "Rajkot 360004.",
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          MyProduct(),
+          SizedBox(
+            height: 16,
+          ),
+          FutureProducts(),
+          SizedBox(
+            height: 16,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Navigator.pushReplacement(context,
+              //     MaterialPageRoute(builder: (context) => AllProductsScreen()));
+            },
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(vertical: 12),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "UPLOAD",
+                  style: TextStyle(
+                      color: AppColors.backgroundColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Prosonal extends StatelessWidget {
+  const Prosonal({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // Community Posts Title start
+      margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Personal Details",
+            style: TextStyle(
+                color: AppColors.txtColor,
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CommunityPostScreen()));
+            },
+            label: Text(
+              "Edit",
+              style: TextStyle(color: AppColors.backgroundColor),
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(
+              Icons.arrow_forward_ios,
+              color: AppColors.backgroundColor,
+              size: 12,
+            ),
+            iconAlignment: IconAlignment.end,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: (AppColors.primaryColor),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+              elevation: 5,
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class FutureProducts extends StatelessWidget {
   const FutureProducts({
     super.key,
@@ -235,29 +453,9 @@ class FutureProducts extends StatelessWidget {
         crossAxisCount: 2, // Two items per row
         crossAxisSpacing: 8, // Horizontal spacing between cards
         mainAxisSpacing: 10, // Vertical spacing between cards
-        childAspectRatio: 0.58, // Controls height/width ratio to match design
+        childAspectRatio: 0.51, // Controls height/width ratio to match design
         physics: NeverScrollableScrollPhysics(),
         children: [
-          ProductCard(
-            title: 'M1',
-            price: '₹290',
-            imageUrl: product1,
-          ),
-          ProductCard(
-            title: 'White Temple',
-            price: '₹89',
-            imageUrl: product2,
-          ),
-          ProductCard(
-            title: 'M1',
-            price: '₹290',
-            imageUrl: product1,
-          ),
-          ProductCard(
-            title: 'White Temple',
-            price: '₹89',
-            imageUrl: product2,
-          ),
           ProductCard(
             title: 'M1',
             price: '₹290',
@@ -345,14 +543,14 @@ class ProductCard extends StatelessWidget {
                   height: 35,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductDetailsScreen()));
+                      // Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => ProductDetailsScreen()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          AppColors.primaryColor, // Color of the button
+                          AppColors.dangerColor, // Color of the button
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(6),
@@ -360,11 +558,10 @@ class ProductCard extends StatelessWidget {
                       padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
                       elevation: 2, // Slight elevation for the button
                     ),
-                    child: Text(
-                      AppTitles.readmore,
-                      style: TextStyle(
-                          color: AppColors.backgroundColor,
-                          fontWeight: FontWeight.bold),
+                    child: Icon(
+                      Icons.delete,
+                      color: AppColors.txtColor,
+                      size: 24,
                     ),
                   ),
                 ),
@@ -377,8 +574,8 @@ class ProductCard extends StatelessWidget {
   }
 }
 
-class Future_Product_title extends StatelessWidget {
-  const Future_Product_title({
+class MyProduct extends StatelessWidget {
+  const MyProduct({
     super.key,
   });
 
@@ -391,7 +588,7 @@ class Future_Product_title extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "3D Printing",
+            "My Products",
             style: TextStyle(
                 color: AppColors.txtColor,
                 fontSize: 20,

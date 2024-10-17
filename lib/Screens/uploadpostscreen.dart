@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/allproductsscreen.dart';
@@ -8,14 +7,14 @@ import 'package:local_community/Screens/communitypostscreen.dart';
 import 'package:local_community/Screens/homescreen.dart';
 import 'package:local_community/Screens/profilescreen.dart';
 
-class UploadProductScreen extends StatefulWidget {
-  const UploadProductScreen({super.key});
+class UploadPostScreen extends StatefulWidget {
+  const UploadPostScreen({super.key});
 
   @override
-  State<UploadProductScreen> createState() => _UploadProductScreenState();
+  State<UploadPostScreen> createState() => _UploadPostScreenState();
 }
 
-class _UploadProductScreenState extends State<UploadProductScreen>
+class _UploadPostScreenState extends State<UploadPostScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool isMenuOpen = false;
@@ -49,15 +48,13 @@ class _UploadProductScreenState extends State<UploadProductScreen>
     return Scaffold(
       appBar: AppBar(
         title: Container(
-          margin: EdgeInsets.fromLTRB(5, 8, 5, 8),
+          margin: EdgeInsets.fromLTRB(35, 8, 35, 8),
           child: Row(
             children: [
               IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AllProductsScreen()));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
                 },
                 icon: Icon(
                   Icons.arrow_back,
@@ -85,11 +82,8 @@ class _UploadProductScreenState extends State<UploadProductScreen>
               child: Column(
                 children: [
                   SizedBox(height: 8),
-                  UploadProduct(),
-                  SizedBox(height: 16),
-                  SizedBox(
-                    height: 28,
-                  ),
+                  UploadPost(),
+                  SizedBox(height: 18),
                 ],
               ),
             ),
@@ -224,15 +218,14 @@ class CircularMenuButton extends StatelessWidget {
   }
 }
 
-
-class UploadProduct extends StatefulWidget {
-  const UploadProduct({super.key});
+class UploadPost extends StatefulWidget {
+  const UploadPost({super.key});
 
   @override
-  State<UploadProduct> createState() => _UploadProductState();
+  State<UploadPost> createState() => _UploadPostState();
 }
 
-class _UploadProductState extends State<UploadProduct> {
+class _UploadPostState extends State<UploadPost> {
   // List of items in the dropdown
   final List<String> items = ['Iot', '3D Printing', 'Circuit', 'Art'];
 
@@ -250,7 +243,7 @@ class _UploadProductState extends State<UploadProduct> {
             height: 32,
           ),
           Text(
-            "Upload Product",
+            "Upload Post",
             style: TextStyle(
                 color: AppColors.txtColor,
                 fontSize: 24,
@@ -276,7 +269,7 @@ class _UploadProductState extends State<UploadProduct> {
                   height: 10,
                 ),
                 Text(
-                  productTitle.ptitle,
+                  postTitle.ptitle,
                   style: TextStyle(
                       color: AppColors.backgroundColor,
                       fontSize: 18,
@@ -296,7 +289,7 @@ class _UploadProductState extends State<UploadProduct> {
                       borderRadius: BorderRadius.circular(6)),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: productTitle.pname,
+                      hintText: 'Enter ' + postTitle.ptitle,
                       hintStyle: TextStyle(
                         color: AppColors.primaryColor,
                       ),
@@ -312,58 +305,7 @@ class _UploadProductState extends State<UploadProduct> {
                   height: 10,
                 ),
                 Text(
-                  productTitle.pcategorytitle,
-                  style: TextStyle(
-                      color: AppColors.backgroundColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2, color: AppColors.backgroundColor),
-                      color: AppColors.backgroundColor,
-                      borderRadius: BorderRadius.circular(6)),
-                  child: DropdownButton<String>(
-                    iconEnabledColor: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(4),
-                    hint: Text(
-                      "Select " + productTitle.pcategorytitle,
-                      style: TextStyle(
-                          color: AppColors.primaryColor, fontSize: 16),
-                    ),
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                    ),
-
-                    isExpanded: true,
-                    focusColor: AppColors.primaryColor,
-                    dropdownColor: AppColors.backgroundColor,
-                    value: selectedItem, // Currently selected item
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedItem = newValue; // Update the selected item
-                      });
-                    },
-                    items: items.map((String item) {
-                      return DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  productTitle.pdescript,
+                  postTitle.ptag,
                   style: TextStyle(
                       color: AppColors.backgroundColor,
                       fontSize: 18,
@@ -383,7 +325,7 @@ class _UploadProductState extends State<UploadProduct> {
                       borderRadius: BorderRadius.circular(6)),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'Enter ' + productTitle.pname,
+                      hintText: 'Enter ' + postTitle.ptitle,
                       hintStyle: TextStyle(
                         color: AppColors.primaryColor,
                       ),
@@ -399,7 +341,43 @@ class _UploadProductState extends State<UploadProduct> {
                   height: 10,
                 ),
                 Text(
-                  productTitle.pimg,
+                  postTitle.pdescript,
+                  style: TextStyle(
+                      color: AppColors.backgroundColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 2, color: AppColors.backgroundColor),
+                      color: AppColors.backgroundColor,
+                      borderRadius: BorderRadius.circular(6)),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Enter ' + postTitle.pdescript,
+                      hintStyle: TextStyle(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  postTitle.pdescript,
                   style: TextStyle(
                       color: AppColors.backgroundColor,
                       fontSize: 18,
@@ -418,7 +396,7 @@ class _UploadProductState extends State<UploadProduct> {
                       color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(6)),
                   child: Text(
-                    "Choose " + productTitle.pimg,
+                    "Choose " + postTitle.pdescript,
                     style: TextStyle(
                       color: AppColors.primaryColor,
                       fontSize: 16,
@@ -434,68 +412,16 @@ class _UploadProductState extends State<UploadProduct> {
           ),
           SizedBox(
             height: 18,
-          ),
-          Text(
-            productTitle.brand,
-            style: TextStyle(
-                color: AppColors.primaryColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: 10,
-            ),
-            width: double.infinity,
-            decoration: BoxDecoration(
-                border: Border.all(width: 2, color: AppColors.txtColor),
-                color: AppColors.txtColor,
-                borderRadius: BorderRadius.circular(6)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2, color: AppColors.backgroundColor),
-                      color: AppColors.backgroundColor,
-                      borderRadius: BorderRadius.circular(6)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Enter ' + productTitle.brand + ' Name',
-                      hintStyle: TextStyle(
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
           ),
           SizedBox(
             height: 18,
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => AllProductsScreen()));
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CommunityPostScreen()));
             },
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(vertical: 12),

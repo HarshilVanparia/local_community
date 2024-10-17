@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/stringnames.dart';
+import 'package:local_community/Screens/homescreen.dart';
 import 'package:local_community/Screens/splashscreen.dart';
 
 void main() {
@@ -39,7 +40,7 @@ class MainApp extends StatelessWidget {
             foregroundColor: AppColors.backgroundColor),
       ),
       home: const Scaffold(
-        body: Center(child: SplashScreen()),
+        body: Center(child: HomeScreen()),
       ),
     );
   }

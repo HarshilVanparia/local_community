@@ -2,8 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
+import 'package:local_community/Screens/allproductsscreen.dart';
+import 'package:local_community/Screens/categoriesscreen.dart';
 import 'package:local_community/Screens/homescreen.dart';
 import 'package:local_community/Screens/loginscreen.dart';
+import 'package:local_community/Screens/profilescreen.dart';
 
 class Bottomnav extends StatefulWidget {
   const Bottomnav({super.key});
@@ -54,128 +57,134 @@ class _BottomnavState extends State<Bottomnav>
             SingleChildScrollView(
               child: Column(
                 children: [
-                  Future_Product_title(),
-                  SizedBox(height: 8),
-                  Products(),
-                  SizedBox(height: 8),
-                  Categories_Title(),
-                  Categories_List(items: items),
-                  SizedBox(height: 8),
-                  Community_Posts_Title(),
-                  SizedBox(height: 8),
-                  Community_Post(),
+                  // Future_Product_title(),
+                  // SizedBox(height: 8),
+                  // Products(),
+                  // SizedBox(height: 8),
+                  // Categories_Title(),
+                  // Categories_List(items: items),
+                  // SizedBox(height: 8),
+                  // Community_Posts_Title(),
+                  // SizedBox(height: 8),
+                  // Community_Post(),
                   SizedBox(height: 18),
                 ],
               ),
             ),
-            // Buttons positioned in a half-circle
-            if (isMenuOpen)
-              Positioned.fill(
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    for (var i = 0; i < 6; i++) _buildCircularMenuButton(i),
-                  ],
-                ),
-              ),
-            // Central Floating Action Button to Toggle Menu
-            Positioned(
-              bottom: 20, // Centralize at the bottom
-              left: MediaQuery.of(context).size.width / 2 - 30,
-              child: FloatingActionButton(
-                onPressed: toggleMenu,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: Icon(
-                    isMenuOpen ? Icons.close : Icons.menu,
-                    size: 28,
-                    key: ValueKey<bool>(isMenuOpen),
+            Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                // Buttons positioned in a half-circle
+                Positioned(
+                  left: MediaQuery.of(context).size.width / 2 - 120,
+                  bottom: 150,
+                  child: Visibility(
+                    visible: isMenuOpen,
+                    child: CircularMenuButton(
+                      icon: Icons.category,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Categoriesscreen()),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
+                // Button 2 (top right of the main button)
+                Positioned(
+                  left: MediaQuery.of(context).size.width / 2 + 60,
+                  bottom: 150,
+                  child: Visibility(
+                    visible: isMenuOpen,
+                    child: CircularMenuButton(
+                      icon: Icons.propane_rounded,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AllProductsScreen()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Button 3 (middle left of the main button)
+                Positioned(
+                  left: MediaQuery.of(context).size.width / 2 - 160,
+                  bottom: 80,
+                  child: Visibility(
+                    visible: isMenuOpen,
+                    child: CircularMenuButton(
+                      icon: Icons.person,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileScreen()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Button 4 (middle right of the main button)
+                Positioned(
+                  left: MediaQuery.of(context).size.width / 2 + 100,
+                  bottom: 80,
+                  child: Visibility(
+                    visible: isMenuOpen,
+                    child: CircularMenuButton(
+                      icon: Icons.post_add,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Community_Post()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Button 5 (directly above the main button)
+                Positioned(
+                  left: MediaQuery.of(context).size.width / 2 - 30,
+                  bottom: 160,
+                  child: Visibility(
+                    visible: isMenuOpen,
+                    child: CircularMenuButton(
+                      icon: Icons.home,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Main Bottom-Center Button
+                Positioned(
+                  bottom: 40, // Adjust for positioning
+                  child: FloatingActionButton(
+                    onPressed: toggleMenu,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: Icon(
+                        isMenuOpen ? Icons.close : Icons.home,
+                        size: 28,
+                        key: ValueKey<bool>(isMenuOpen),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
-  }
-
-  // Method to create circular menu buttons in a semi-circle
-  Widget _buildCircularMenuButton(int index) {
-    // Number of buttons in the half-circle
-    final numberOfButtons = 6;
-    final double radius = 120; // Radius of the half-circle
-
-    // Calculate the angle in radians
-    double angle = pi / (numberOfButtons - 1) * index;
-
-    // Calculate the x and y positions using trigonometry
-    double x = cos(angle) * radius;
-    double y = sin(angle) * radius;
-
-    // Positioned widget to place each button
-    return Positioned(
-      bottom: 80 + y,
-      left: MediaQuery.of(context).size.width / 2 - 30 + x,
-      child: CircularMenuButton(
-        icon: _getIconForButton(index),
-        onPressed: () {
-          if (mounted) {
-            if (index == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            } else if (index == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            } else if (index == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            } else if (index == 3) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            } else if (index == 4) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            } else if (index == 5) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            }
-          }
-        },
-      ),
-    );
-  }
-
-  // Define icons for each button
-  IconData _getIconForButton(int index) {
-    switch (index) {
-      case 0:
-        return Icons.build;
-      case 1:
-        return Icons.dashboard;
-      case 2:
-        return Icons.gamepad;
-      case 3:
-        return Icons.settings;
-      case 4:
-        return Icons.home;
-      case 5:
-        return Icons.person;
-      default:
-        return Icons.home;
-    }
   }
 }
 

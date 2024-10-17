@@ -46,3 +46,11 @@ class productTitle {
   static const String pcategorytitle = "Product Category";
   static const String pimg = "Product Image";
 }
+
+class postTitle {
+  static const String ptitle = "Post Title";
+  static const String ptag = "Post Tags";
+  static const String pdescript = "Post Details";
+  static const String brand = "Brand";
+  static const String pimg = "Product Image";
+}

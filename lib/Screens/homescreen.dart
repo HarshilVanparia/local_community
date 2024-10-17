@@ -1,17 +1,14 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/allproductsscreen.dart';
-import 'package:local_community/Screens/bottomnav.dart';
+
 import 'package:local_community/Screens/categoriesscreen.dart';
 import 'package:local_community/Screens/communitypostscreen.dart';
 
-import 'package:local_community/Screens/loginscreen.dart';
 import 'package:local_community/Screens/productdetailsscreen.dart';
 import 'package:local_community/Screens/productsscreen.dart';
-import 'package:local_community/Screens/registerscreen.dart';
+import 'package:local_community/Screens/profilescreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,39 +17,40 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomSscreenState();
 }
 
-class _HomSscreenState extends State<HomeScreen> {
+class _HomSscreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   // categories details
   final List<Map<String, String>> items = [
     {'title': 'Electronics', 'icon': category1},
     {'title': 'IOT', 'icon': category2},
     {'title': 'Circuit', 'icon': category3},
   ];
-  // late AnimationController _controller;
-  // bool isMenuOpen = false;
+  late AnimationController _controller;
+  bool isMenuOpen = false;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _controller = AnimationController(
-  //     duration: const Duration(milliseconds: 300),
-  //     vsync: this,
-  //   );
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+  }
 
-  // void toggleMenu() {
-  //   if (mounted) {
-  //     setState(() {
-  //       isMenuOpen = !isMenuOpen;
-  //       isMenuOpen ? _controller.forward() : _controller.reverse();
-  //     });
-  //   }
-  // }
+  void toggleMenu() {
+    if (mounted) {
+      setState(() {
+        isMenuOpen = !isMenuOpen;
+        isMenuOpen ? _controller.forward() : _controller.reverse();
+      });
+    }
+  }
 
-  // @override
-  // void dispose() {
-  //   _controller.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,146 +80,201 @@ class _HomSscreenState extends State<HomeScreen> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  Future_Product_title(),
+                  // Future Products Section
+                  _buildSectionHeader('Future Products', onTap: () {}),
                   SizedBox(height: 8),
                   Products(),
                   SizedBox(height: 8),
-                  Categories_Title(),
+
+                  // Categories Section
+                  _buildSectionHeader('Categories', onTap: () {}),
+                  SizedBox(height: 8),
                   Categories_List(items: items),
                   SizedBox(height: 8),
-                  Community_Posts_Title(),
+
+                  // Community Post Section
+                  _buildSectionHeader('Community Post', onTap: () {}),
+                  SizedBox(height: 8),
+                  // Community_Posts_Title(),
                   SizedBox(height: 8),
                   Community_Post(),
-                  SizedBox(height: 18),
+                  SizedBox(height: 100),
                 ],
               ),
             ),
             // Buttons positioned in a half-circle
-            // if (isMenuOpen)
-            //   Positioned.fill(
-            //     child: Stack(
-            //       alignment: Alignment.bottomCenter,
-            //       children: [
-            //         for (var i = 0; i < 6; i++) _buildCircularMenuButton(i),
-            //       ],
-            //     ),
-            //   ),
-            // Central Floating Action Button to Toggle Menu
-            // Positioned(
-            //   bottom: 20, // Centralize at the bottom
-            //   left: MediaQuery.of(context).size.width / 2 - 30,
-            //   child: FloatingActionButton(
-            //     onPressed: toggleMenu,
-            //     child: AnimatedSwitcher(
-            //       duration: const Duration(milliseconds: 300),
-            //       child: Icon(
-            //         isMenuOpen ? Icons.close : Icons.menu,
-            //         size: 28,
-            //         key: ValueKey<bool>(isMenuOpen),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // Bottomnav(),
+            Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                // Buttons positioned in a half-circle
+                Positioned(
+                  left: MediaQuery.of(context).size.width / 2 - 120,
+                  bottom: 150,
+                  child: Visibility(
+                    visible: isMenuOpen,
+                    child: CircularMenuButton(
+                      icon: Icons.category,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Categoriesscreen()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Button 2 (top right of the main button)
+                Positioned(
+                  left: MediaQuery.of(context).size.width / 2 + 60,
+                  bottom: 150,
+                  child: Visibility(
+                    visible: isMenuOpen,
+                    child: CircularMenuButton(
+                      icon: Icons.propane_rounded,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AllProductsScreen()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Button 3 (middle left of the main button)
+                Positioned(
+                  left: MediaQuery.of(context).size.width / 2 - 160,
+                  bottom: 80,
+                  child: Visibility(
+                    visible: isMenuOpen,
+                    child: CircularMenuButton(
+                      icon: Icons.person,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileScreen()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Button 4 (middle right of the main button)
+                Positioned(
+                  left: MediaQuery.of(context).size.width / 2 + 100,
+                  bottom: 80,
+                  child: Visibility(
+                    visible: isMenuOpen,
+                    child: CircularMenuButton(
+                      icon: Icons.post_add,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CommunityPostScreen()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Button 5 (directly above the main button)
+                Positioned(
+                  left: MediaQuery.of(context).size.width / 2 - 30,
+                  bottom: 160,
+                  child: Visibility(
+                    visible: isMenuOpen,
+                    child: CircularMenuButton(
+                      icon: Icons.home,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Main Bottom-Center Button
+                Positioned(
+                  bottom: 40, // Adjust for positioning
+                  child: FloatingActionButton(
+                    onPressed: toggleMenu,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: Icon(
+                        isMenuOpen ? Icons.close : Icons.home,
+                        size: 28,
+                        key: ValueKey<bool>(isMenuOpen),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  // Method to create circular menu buttons in a semi-circle
-  // Widget _buildCircularMenuButton(int index) {
-  //   // Number of buttons in the half-circle
-  //   final numberOfButtons = 6;
-  //   final double radius = 120; // Radius of the half-circle
-
-  //   // Calculate the angle in radians
-  //   double angle = pi / (numberOfButtons - 1) * index;
-
-  //   // Calculate the x and y positions using trigonometry
-  //   double x = cos(angle) * radius;
-  //   double y = sin(angle) * radius;
-
-  //   // Positioned widget to place each button
-  //   return Positioned(
-  //     bottom: 80 + y,
-  //     left: MediaQuery.of(context).size.width / 2 - 30 + x,
-  //     child: CircularMenuButton(
-  //       icon: _getIconForButton(index),
-  //       onPressed: () {
-  //         if (mounted) {
-  //           if (index == 0) {
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => LoginScreen()),
-  //             );
-  //           } else if (index == 1) {
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => RegisterScreen()),
-  //             );
-  //           } else if (index == 2) {
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => RegisterScreen()),
-  //             );
-  //           } else if (index == 3) {
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => RegisterScreen()),
-  //             );
-  //           } else if (index == 4) {
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => RegisterScreen()),
-  //             );
-  //           } else if (index == 5) {
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => RegisterScreen()),
-  //             );
-  //           }
-  //         }
-  //       },
-  //     ),
-  //   );
-  // }
-
-  // Define icons for each button
-  // IconData _getIconForButton(int index) {
-  //   switch (index) {
-  //     case 0:
-  //       return Icons.build;
-  //     case 1:
-  //       return Icons.dashboard;
-  //     case 2:
-  //       return Icons.gamepad;
-  //     case 3:
-  //       return Icons.settings;
-  //     case 4:
-  //       return Icons.home;
-  //     case 5:
-  //       return Icons.person;
-  //     default:
-  //       return Icons.home;
-  //   }
-  // }
+  // Section Header Widget with Explore Button
+  Widget _buildSectionHeader(String title, {required Function() onTap}) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              // Navigator.pushReplacement(context,
+              //     MaterialPageRoute(builder: (context) => AllProductsScreen()));
+            },
+            label: Text(
+              AppTitles.explore,
+              style: TextStyle(color: AppColors.backgroundColor),
+              textAlign: TextAlign.center,
+            ),
+            icon: Icon(
+              Icons.arrow_forward_ios,
+              color: AppColors.backgroundColor,
+              size: 12,
+            ),
+            iconAlignment: IconAlignment.end,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: (AppColors.primaryColor),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+              elevation: 5,
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-// class CircularMenuButton extends StatelessWidget {
-//   final IconData icon;
-//   final VoidCallback onPressed;
+class CircularMenuButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
 
-//   CircularMenuButton({required this.icon, required this.onPressed});
+  CircularMenuButton({required this.icon, required this.onPressed});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return FloatingActionButton(
-//       onPressed: onPressed,
-//       child: Icon(icon),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: onPressed,
+      child: Icon(icon),
+    );
+  }
+}
 
 class Community_Post extends StatelessWidget {
   const Community_Post({
@@ -372,58 +425,58 @@ class Community_Post extends StatelessWidget {
   }
 }
 
-class Community_Posts_Title extends StatelessWidget {
-  const Community_Posts_Title({
-    super.key,
-  });
+// class Community_Posts_Title extends StatelessWidget {
+//   const Community_Posts_Title({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // Community Posts Title start
-      margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Community Posts",
-            style: TextStyle(
-                color: AppColors.txtColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CommunityPostScreen()));
-            },
-            label: Text(
-              AppTitles.explore,
-              style: TextStyle(color: AppColors.backgroundColor),
-              textAlign: TextAlign.center,
-            ),
-            icon: Icon(
-              Icons.arrow_forward_ios,
-              color: AppColors.backgroundColor,
-              size: 12,
-            ),
-            iconAlignment: IconAlignment.end,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: (AppColors.primaryColor),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              elevation: 5,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       // Community Posts Title start
+//       margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 8.0),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Text(
+//             "Community Posts",
+//             style: TextStyle(
+//                 color: AppColors.txtColor,
+//                 fontSize: 20,
+//                 fontWeight: FontWeight.bold),
+//           ),
+//           ElevatedButton.icon(
+//             onPressed: () {
+//               Navigator.pushReplacement(
+//                   context,
+//                   MaterialPageRoute(
+//                       builder: (context) => CommunityPostScreen()));
+//             },
+//             label: Text(
+//               AppTitles.explore,
+//               style: TextStyle(color: AppColors.backgroundColor),
+//               textAlign: TextAlign.center,
+//             ),
+//             icon: Icon(
+//               Icons.arrow_forward_ios,
+//               color: AppColors.backgroundColor,
+//               size: 12,
+//             ),
+//             iconAlignment: IconAlignment.end,
+//             style: ElevatedButton.styleFrom(
+//               backgroundColor: (AppColors.primaryColor),
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(4),
+//               ),
+//               elevation: 5,
+//               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class Categories_List extends StatelessWidget {
   const Categories_List({
@@ -474,110 +527,110 @@ class Categories_List extends StatelessWidget {
   }
 }
 
-class Categories_Title extends StatelessWidget {
-  const Categories_Title({
-    super.key,
-  });
+// class Categories_Title extends StatelessWidget {
+//   const Categories_Title({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // Categories Title start
-      margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Categories",
-            style: TextStyle(
-                color: AppColors.txtColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Categoriesscreen(),
-                  ));
-            },
-            label: Text(
-              AppTitles.explore,
-              style: TextStyle(color: AppColors.backgroundColor),
-              textAlign: TextAlign.center,
-            ),
-            icon: Icon(
-              Icons.arrow_forward_ios,
-              color: AppColors.backgroundColor,
-              size: 12,
-            ),
-            iconAlignment: IconAlignment.end,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: (AppColors.primaryColor),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              elevation: 5,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       // Categories Title start
+//       margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 4.0),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Text(
+//             "Categories",
+//             style: TextStyle(
+//                 color: AppColors.txtColor,
+//                 fontSize: 20,
+//                 fontWeight: FontWeight.bold),
+//           ),
+//           ElevatedButton.icon(
+//             onPressed: () {
+//               Navigator.pushReplacement(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) => Categoriesscreen(),
+//                   ));
+//             },
+//             label: Text(
+//               AppTitles.explore,
+//               style: TextStyle(color: AppColors.backgroundColor),
+//               textAlign: TextAlign.center,
+//             ),
+//             icon: Icon(
+//               Icons.arrow_forward_ios,
+//               color: AppColors.backgroundColor,
+//               size: 12,
+//             ),
+//             iconAlignment: IconAlignment.end,
+//             style: ElevatedButton.styleFrom(
+//               backgroundColor: (AppColors.primaryColor),
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(4),
+//               ),
+//               elevation: 5,
+//               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class Future_Product_title extends StatelessWidget {
-  const Future_Product_title({
-    super.key,
-  });
+// class Future_Product_title extends StatelessWidget {
+//   const Future_Product_title({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      //Future Product title Start
-      margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Future Products",
-            style: TextStyle(
-                color: AppColors.txtColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-          ElevatedButton.icon(
-            onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => AllProductsScreen()));
-            },
-            label: Text(
-              AppTitles.explore,
-              style: TextStyle(color: AppColors.backgroundColor),
-              textAlign: TextAlign.center,
-            ),
-            icon: Icon(
-              Icons.arrow_forward_ios,
-              color: AppColors.backgroundColor,
-              size: 12,
-            ),
-            iconAlignment: IconAlignment.end,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: (AppColors.primaryColor),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              elevation: 5,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       //Future Product title Start
+//       margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 4.0),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Text(
+//             "Future Products",
+//             style: TextStyle(
+//                 color: AppColors.txtColor,
+//                 fontSize: 20,
+//                 fontWeight: FontWeight.bold),
+//           ),
+//           ElevatedButton.icon(
+//             onPressed: () {
+//               Navigator.pushReplacement(context,
+//                   MaterialPageRoute(builder: (context) => AllProductsScreen()));
+//             },
+//             label: Text(
+//               AppTitles.explore,
+//               style: TextStyle(color: AppColors.backgroundColor),
+//               textAlign: TextAlign.center,
+//             ),
+//             icon: Icon(
+//               Icons.arrow_forward_ios,
+//               color: AppColors.backgroundColor,
+//               size: 12,
+//             ),
+//             iconAlignment: IconAlignment.end,
+//             style: ElevatedButton.styleFrom(
+//               backgroundColor: (AppColors.primaryColor),
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(4),
+//               ),
+//               elevation: 5,
+//               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class Products extends StatelessWidget {
   const Products({
@@ -642,14 +695,18 @@ class ProductCard extends StatelessWidget {
               topLeft: Radius.circular(6),
               topRight: Radius.circular(6),
             ),
-            child: Image.asset(
-              imageUrl,
-              height: 170, // Adjust the height to your liking
-              fit: BoxFit.fill, // Ensures the image covers the available space
+            child: Container(
+              height: 270,
+              child: Image.asset(
+                imageUrl,
+                height: double.infinity, // Adjust the height to your liking
+                fit: BoxFit
+                    .cover, // Ensures the image covers the available space
+              ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 12.0, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 2.0, 0, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
