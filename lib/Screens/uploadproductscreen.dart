@@ -52,18 +52,18 @@ class _UploadProductScreenState extends State<UploadProductScreen>
           margin: EdgeInsets.fromLTRB(5, 8, 5, 8),
           child: Row(
             children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AllProductsScreen()));
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: AppColors.txtColor,
-                ),
-              ),
+              // IconButton(
+              //   onPressed: () {
+              //     Navigator.pushReplacement(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (context) => AllProductsScreen()));
+              //   },
+              //   icon: Icon(
+              //     Icons.arrow_back,
+              //     color: AppColors.txtColor,
+              //   ),
+              // ),
               Image.asset(
                 logo,
                 width: 50,

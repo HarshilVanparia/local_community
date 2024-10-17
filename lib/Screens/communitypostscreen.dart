@@ -51,16 +51,16 @@ class _CommunityPostScreenState extends State<CommunityPostScreen>
           margin: EdgeInsets.fromLTRB(5, 8, 5, 8),
           child: Row(
             children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: AppColors.txtColor,
-                ),
-              ),
+              // IconButton(
+              //   onPressed: () {
+              //     Navigator.pushReplacement(context,
+              //         MaterialPageRoute(builder: (context) => HomeScreen()));
+              //   },
+              //   icon: Icon(
+              //     Icons.arrow_back,
+              //     color: AppColors.txtColor,
+              //   ),
+              // ),
               Image.asset(
                 logo,
                 width: 50,

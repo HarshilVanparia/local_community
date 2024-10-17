@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 
 class MyAllWidget extends StatelessWidget {
@@ -17,7 +18,7 @@ class MyAllWidget extends StatelessWidget {
               _buildSectionHeader('Future Products', onTap: () {}),
               SizedBox(height: 8),
               _buildFutureProducts(),
-              
+
               SizedBox(height: 24),
 
               // Categories Section
@@ -37,6 +38,7 @@ class MyAllWidget extends StatelessWidget {
       ),
     );
   }
+
   // Section Header Widget with Explore Button
   Widget _buildSectionHeader(String title, {required Function() onTap}) {
     return Row(
@@ -48,30 +50,30 @@ class MyAllWidget extends StatelessWidget {
               color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
         ),
         ElevatedButton.icon(
-            onPressed: () {
-              // Navigator.pushReplacement(context,
-              //     MaterialPageRoute(builder: (context) => AllProductsScreen()));
-            },
-            label: Text(
-              AppTitles.explore,
-              style: TextStyle(color: AppColors.backgroundColor),
-              textAlign: TextAlign.center,
-            ),
-            icon: Icon(
-              Icons.arrow_forward_ios,
-              color: AppColors.backgroundColor,
-              size: 12,
-            ),
-            iconAlignment: IconAlignment.end,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: (AppColors.primaryColor),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              elevation: 5,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            ),
+          onPressed: () {
+            // Navigator.pushReplacement(context,
+            //     MaterialPageRoute(builder: (context) => AllProductsScreen()));
+          },
+          label: Text(
+            AppTitles.explore,
+            style: TextStyle(color: AppColors.backgroundColor),
+            textAlign: TextAlign.center,
           ),
+          icon: Icon(
+            Icons.arrow_forward_ios,
+            color: AppColors.backgroundColor,
+            size: 12,
+          ),
+          iconAlignment: IconAlignment.end,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: (AppColors.primaryColor),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+            elevation: 5,
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          ),
+        ),
       ],
     );
   }
@@ -84,7 +86,8 @@ class MyAllWidget extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: [
           _buildProductCard('HASTHIP', '₹1,999', 'assets/futureProduct1.png'),
-          _buildProductCard('Bitdefender', '₹3,199', 'assets/futureProduct2.png'),
+          _buildProductCard(
+              'Bitdefender', '₹3,199', 'assets/futureProduct2.png'),
         ],
       ),
     );
@@ -127,14 +130,13 @@ class MyAllWidget extends StatelessWidget {
           ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(16),
                     bottomRight: Radius.circular(16)),
               ),
             ),
-            child: Text('Read More', style: TextStyle(color: Colors.black87)),
+            child: Text(AppTitles.readmore),
           ),
         ],
       ),
@@ -169,48 +171,139 @@ class MyAllWidget extends StatelessWidget {
   // Community Posts
   Widget _buildCommunityPosts() {
     return Container(
-      padding: EdgeInsets.all(12),
+      margin: EdgeInsets.symmetric(horizontal: 22.0),
       decoration: BoxDecoration(
-        color: Colors.black26,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        border: Border.all(
+            color: AppColors.txtColor, width: 1, style: BorderStyle.solid),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.amber,
-                child: Icon(Icons.person, color: Colors.black87),
-              ),
-              SizedBox(width: 8),
-              Text('User789', style: TextStyle(color: Colors.white)),
-            ],
-          ),
-          SizedBox(height: 8),
-          Text(
-            'I\'m facing problems when I click on the button...',
-            style: TextStyle(color: Colors.white),
-          ),
-          SizedBox(height: 8),
-          Wrap(
-            spacing: 4,
-            children: [
-              Chip(label: Text('#IoT')),
-              Chip(label: Text('#Circuit')),
-              Chip(label: Text('#Flutter')),
-              Chip(label: Text('#ESP32')),
-            ],
-          ),
-          SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Comment here...',
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              children: [
+                SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: CircleAvatar(backgroundImage: AssetImage(user))),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  "kachra seth",
+                  style: TextStyle(
+                    color: AppColors.txtColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
+          ),
+          Container(
+            color: AppColors.txtColor,
+            height: 350,
+            child: Image.asset(
+              width: double.infinity,
+              height: 250,
+              post,
+              fit: BoxFit.contain,
+            ),
+          ),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "I’m facing problem when ever click on button then it should on LED light of ESP32 with Bluetooth but its not working if anyone have solution please comment down. appreciate any help thanks in advance.",
+                  style: TextStyle(color: AppColors.txtColor),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2, color: AppColors.primaryColor),
+                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.primaryColor,
+                      ),
+                      child: Text(
+                        "#Iot",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, wordSpacing: 1),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2, color: AppColors.primaryColor),
+                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.primaryColor,
+                      ),
+                      child: Text(
+                        "#Circuit",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, wordSpacing: 1),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2, color: AppColors.primaryColor),
+                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.primaryColor,
+                      ),
+                      child: Text(
+                        "#ESP32",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, wordSpacing: 1),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4)),
+                      hintText: AppTitles.comment,
+                      hintStyle: TextStyle(
+                          color: AppColors.graybox,
+                          fontWeight: FontWeight.bold)),
+                  style: TextStyle(color: AppColors.graybox),
+                ),
+              ),
+              Container(
+                height: 150,
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                color: AppColors.commentbox,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Text(
+                    "Step:1 Try running the flutter build web command in your project and inspect the build folder. Assuming a pubspec.yaml with following asset configurations.\nStep: 2 Ensure the files as shown above are available in your server where this folder is hosted. Also verify if the server has any configurations to be made specifically for image files or types of images files.",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                        fontSize: 16,
+                        wordSpacing: 1,
+                        color: AppColors.txtColor),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+            ],
           ),
         ],
       ),

@@ -81,13 +81,23 @@ class _HomSscreenState extends State<HomeScreen>
               child: Column(
                 children: [
                   // Future Products Section
-                  _buildSectionHeader('Future Products', onTap: () {}),
+                  _buildSectionHeader('Future Products', onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AllProductsScreen()));
+                  }),
                   SizedBox(height: 8),
                   Products(),
                   SizedBox(height: 8),
 
                   // Categories Section
-                  _buildSectionHeader('Categories', onTap: () {}),
+                  _buildSectionHeader('Categories', onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Categoriesscreen()));
+                  }),
                   SizedBox(height: 8),
                   Categories_List(items: items),
                   SizedBox(height: 8),
@@ -103,6 +113,7 @@ class _HomSscreenState extends State<HomeScreen>
               ),
             ),
             // Buttons positioned in a half-circle
+
             Stack(
               alignment: Alignment.bottomCenter,
               children: [
@@ -231,10 +242,7 @@ class _HomSscreenState extends State<HomeScreen>
                 color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           ElevatedButton.icon(
-            onPressed: () {
-              // Navigator.pushReplacement(context,
-              //     MaterialPageRoute(builder: (context) => AllProductsScreen()));
-            },
+            onPressed: onTap,
             label: Text(
               AppTitles.explore,
               style: TextStyle(color: AppColors.backgroundColor),

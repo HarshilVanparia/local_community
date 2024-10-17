@@ -72,8 +72,117 @@ class _CategoriesscreenState extends State<Categoriesscreen>
               child: Column(
                 children: [
                   SizedBox(height: 8),
-                  Categories_Title(),
-                  Categories_Items(),
+                  // Categories_Title(),
+
+                  // Categories Title Start
+                  _buildSectionHeader('Categories'),
+                  // Categories Title End
+
+                  SizedBox(height: 8),
+
+                  // Categories Section Start
+
+                  // Row 1 Start
+                  _buildCategoryCard(
+                    imageAsset1: iot,
+                    title1: categoriesTitles.iot,
+                    onTap1: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductsScreen(),
+                        ),
+                      );
+                    },
+                    imageAsset2: ele,
+                    title2: categoriesTitles.ele,
+                    onTap2: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  // Row 1 End
+
+                  // Row 2 Start
+                  _buildCategoryCard(
+                    imageAsset1: circuit,
+                    title1: categoriesTitles.circuit,
+                    onTap1: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductsScreen(),
+                        ),
+                      );
+                    },
+                    imageAsset2: printing,
+                    title2: categoriesTitles.printing,
+                    onTap2: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  // Row 2 End
+
+                  // Row 3 Start
+                  _buildCategoryCard(
+                    imageAsset1: csdesign,
+                    title1: categoriesTitles.design,
+                    onTap1: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductsScreen(),
+                        ),
+                      );
+                    },
+                    imageAsset2: art,
+                    title2: categoriesTitles.art,
+                    onTap2: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  // Row 3 End
+
+                  // Row 4 Start
+                  _buildCategoryCard(
+                    imageAsset1: herb,
+                    title1: categoriesTitles.herbs,
+                    onTap1: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductsScreen(),
+                        ),
+                      );
+                    },
+                    imageAsset2: strip,
+                    title2: categoriesTitles.led,
+                    onTap2: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  // Row 4 End
+
+                  // Categories_Items(),
                   SizedBox(height: 100),
                 ],
               ),
@@ -209,439 +318,123 @@ class CircularMenuButton extends StatelessWidget {
   }
 }
 
-class Categories_Items extends StatelessWidget {
-  const Categories_Items({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              children: [
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductsScreen(),
-                            ));
-                      },
-                      child: Container(
-                        width: 152,
-                        height: 152,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment
-                              .spaceEvenly, // for inside icon & text
-                          children: [
-                            CircleAvatar(
-                              radius: 30, // radius as required
-                              backgroundColor: AppColors.primaryColor,
-                              child: Image.asset(
-                                iot,
-                                fit: BoxFit
-                                    .cover, // Ensures the whole image is visible
-                                width: 38, // Adjust based on the size you need
-                                height: 38,
-                              ),
-                            ),
-                            Text(
-                              categoriesTitles.iot,
-                              style: TextStyle(
-                                color: AppColors.txtColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductsScreen(),
-                            ));
-                      },
-                      child: Container(
-                        width: 152,
-                        height: 152,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CircleAvatar(
-                              radius: 30, // radius as required
-                              backgroundColor: AppColors.primaryColor,
-                              child: Image.asset(
-                                ele,
-                                fit: BoxFit
-                                    .cover, // Ensures the whole image is visible
-                                width: 38, // Adjust based on the size you need
-                                height: 38,
-                              ),
-                            ),
-                            Text(
-                              categoriesTitles.ele,
-                              style: TextStyle(
-                                color: AppColors.txtColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ), // row 1 end
-                SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductsScreen(),
-                            ));
-                      },
-                      child: Container(
-                        width: 152,
-                        height: 152,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment
-                              .spaceEvenly, // for inside icon & text
-                          children: [
-                            CircleAvatar(
-                              radius: 30, // radius as required
-                              backgroundColor: AppColors.primaryColor,
-                              child: Image.asset(
-                                circuit,
-                                fit: BoxFit
-                                    .cover, // Ensures the whole image is visible
-                                width: 38, // Adjust based on the size you need
-                                height: 38,
-                              ),
-                            ),
-                            Text(
-                              categoriesTitles.circuit,
-                              style: TextStyle(
-                                color: AppColors.txtColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductsScreen(),
-                            ));
-                      },
-                      child: Container(
-                        width: 152,
-                        height: 152,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CircleAvatar(
-                              radius: 30, // radius as required
-                              backgroundColor: AppColors.primaryColor,
-                              child: Image.asset(
-                                printing,
-                                fit: BoxFit
-                                    .cover, // Ensures the whole image is visible
-                                width: 38, // Adjust based on the size you need
-                                height: 38,
-                              ),
-                            ),
-                            Text(
-                              categoriesTitles.printing,
-                              style: TextStyle(
-                                color: AppColors.txtColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ), // row 2 end
-                SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductsScreen(),
-                            ));
-                      },
-                      child: Container(
-                        width: 152,
-                        height: 152,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment
-                              .spaceEvenly, // for inside icon & text
-                          children: [
-                            CircleAvatar(
-                              radius: 30, // radius as required
-                              backgroundColor: AppColors.primaryColor,
-                              child: Image.asset(
-                                csdesign,
-                                fit: BoxFit
-                                    .cover, // Ensures the whole image is visible
-                                width: 38, // Adjust based on the size you need
-                                height: 38,
-                              ),
-                            ),
-                            Text(
-                              categoriesTitles.design,
-                              style: TextStyle(
-                                color: AppColors.txtColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductsScreen(),
-                            ));
-                      },
-                      child: Container(
-                        width: 152,
-                        height: 152,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CircleAvatar(
-                              radius: 30, // radius as required
-                              backgroundColor: AppColors.primaryColor,
-                              child: Image.asset(
-                                art,
-                                fit: BoxFit
-                                    .cover, // Ensures the whole image is visible
-                                width: 38, // Adjust based on the size you need
-                                height: 38,
-                              ),
-                            ),
-                            Text(
-                              categoriesTitles.art,
-                              style: TextStyle(
-                                color: AppColors.txtColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ), // row 3 end
-                SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductsScreen(),
-                            ));
-                      },
-                      child: Container(
-                        width: 152,
-                        height: 152,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment
-                              .spaceEvenly, // for inside icon & text
-                          children: [
-                            CircleAvatar(
-                              radius: 30, // radius as required
-                              backgroundColor: AppColors.primaryColor,
-                              child: Image.asset(
-                                herb,
-                                fit: BoxFit
-                                    .cover, // Ensures the whole image is visible
-                                width: 38, // Adjust based on the size you need
-                                height: 38,
-                              ),
-                            ),
-                            Text(
-                              categoriesTitles.herbs,
-                              style: TextStyle(
-                                color: AppColors.txtColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductsScreen(),
-                            ));
-                      },
-                      child: Container(
-                        width: 152,
-                        height: 152,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CircleAvatar(
-                              radius: 30, // radius as required
-                              backgroundColor: AppColors.primaryColor,
-                              child: Image.asset(
-                                strip,
-                                fit: BoxFit
-                                    .cover, // Ensures the whole image is visible
-                                width: 38, // Adjust based on the size you need
-                                height: 38,
-                              ),
-                            ),
-                            Text(
-                              categoriesTitles.led,
-                              style: TextStyle(
-                                color: AppColors.txtColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ), // row 4 end
-                SizedBox(
-                  height: 18,
-                ),
-              ],
-            ),
-          ],
-        ));
-  }
+// Section Header for Categories
+Widget _buildSectionHeader(String title) {
+  return Container(
+    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+      ],
+    ),
+  );
 }
 
-class Categories_Title extends StatelessWidget {
-  const Categories_Title({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // Categories Title start
-      margin: EdgeInsets.symmetric(horizontal: 35.0, vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Categories",
-            style: TextStyle(
-                color: AppColors.txtColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
+// Section Categories Card
+Widget _buildCategoryCard({
+  required String imageAsset1,
+  required String title1,
+  required Function() onTap1,
+  required String imageAsset2,
+  required String title2,
+  required Function() onTap2,
+}) {
+  return Container(
+    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            TextButton(
+              onPressed: onTap1,
+              child: Container(
+                width: 152,
+                height: 152,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    style: BorderStyle.solid,
+                    color: AppColors.primaryColor,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceEvenly, // for inside icon & text
+                  children: [
+                    CircleAvatar(
+                      radius: 30, // radius as required
+                      backgroundColor: AppColors.primaryColor,
+                      child: Image.asset(
+                        imageAsset1,
+                        fit: BoxFit.cover, // Ensures the whole image is visible
+                        width: 38, // Adjust based on the size you need
+                        height: 38,
+                      ),
+                    ),
+                    Text(
+                      title1,
+                      style: TextStyle(
+                        color: AppColors.txtColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: onTap2,
+              child: Container(
+                width: 152,
+                height: 152,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    style: BorderStyle.solid,
+                    color: AppColors.primaryColor,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.spaceEvenly, // for inside icon & text
+                  children: [
+                    CircleAvatar(
+                      radius: 30, // radius as required
+                      backgroundColor: AppColors.primaryColor,
+                      child: Image.asset(
+                        imageAsset2,
+                        fit: BoxFit.cover, // Ensures the whole image is visible
+                        width: 38, // Adjust based on the size you need
+                        height: 38,
+                      ),
+                    ),
+                    Text(
+                      title2,
+                      style: TextStyle(
+                        color: AppColors.txtColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ), // row  end
+        SizedBox(
+          height: 20,
+        ),
+      ],
+    ),
+  );
 }

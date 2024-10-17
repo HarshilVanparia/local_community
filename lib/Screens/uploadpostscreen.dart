@@ -51,16 +51,16 @@ class _UploadPostScreenState extends State<UploadPostScreen>
           margin: EdgeInsets.fromLTRB(35, 8, 35, 8),
           child: Row(
             children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()));
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: AppColors.txtColor,
-                ),
-              ),
+              // IconButton(
+              //   onPressed: () {
+              //     Navigator.pushReplacement(context,
+              //         MaterialPageRoute(builder: (context) => HomeScreen()));
+              //   },
+              //   icon: Icon(
+              //     Icons.arrow_back,
+              //     color: AppColors.txtColor,
+              //   ),
+              // ),
               Image.asset(
                 logo,
                 width: 50,
