@@ -50,18 +50,18 @@ class _ProfileScreenState extends State<ProfileScreen>
           margin: EdgeInsets.fromLTRB(5, 8, 5, 8),
           child: Row(
             children: [
-              IconButton(
-                onPressed: () {
-                  // Navigator.pushReplacement(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => AllProductsScreen()));
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: AppColors.txtColor,
-                ),
-              ),
+              // IconButton(
+              //   onPressed: () {
+              //     // Navigator.pushReplacement(
+              //     //     context,
+              //     //     MaterialPageRoute(
+              //     //         builder: (context) => AllProductsScreen()));
+              //   },
+              //   icon: Icon(
+              //     Icons.arrow_back,
+              //     color: AppColors.txtColor,
+              //   ),
+              // ),
               Image.asset(
                 logo,
                 width: 50,
@@ -84,7 +84,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                 children: [
                   SizedBox(height: 8),
                   Profile(),
-                  SizedBox(height: 16),
                   SizedBox(height: 16),
                   SizedBox(
                     height: 100,
@@ -234,7 +233,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24),
+      margin: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
           Column(
@@ -346,11 +345,16 @@ class _ProfileState extends State<Profile> {
           SizedBox(
             height: 16,
           ),
-          MyProduct(),
+          _buildSectionHeader("My Products"),
           SizedBox(
             height: 16,
           ),
           FutureProducts(),
+          SizedBox(
+            height: 16,
+          ),
+          _buildSectionHeader("Community Posts"),
+          Post1(),
           SizedBox(
             height: 16,
           ),
@@ -360,15 +364,16 @@ class _ProfileState extends State<Profile> {
               //     MaterialPageRoute(builder: (context) => AllProductsScreen()));
             },
             style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 12),
+              backgroundColor: AppColors.dangerColor,
+              padding: EdgeInsets.symmetric(vertical: 20),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "UPLOAD",
+                  "DELETE ACCOUNT",
                   style: TextStyle(
-                      color: AppColors.backgroundColor,
+                      color: AppColors.txtColor,
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),
@@ -377,6 +382,178 @@ class _ProfileState extends State<Profile> {
           ),
           SizedBox(
             height: 10,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Post1 extends StatelessWidget {
+  const Post1({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // Community Post Start
+      margin: EdgeInsets.symmetric(horizontal: 10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        border: Border.all(
+            color: AppColors.txtColor, width: 1, style: BorderStyle.solid),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              children: [
+                SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: CircleAvatar(backgroundImage: AssetImage(user))),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  "kachra seth",
+                  style: TextStyle(
+                    color: AppColors.txtColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: AppColors.txtColor,
+            height: 350,
+            child: Image.asset(
+              width: double.infinity,
+              height: 250,
+              post,
+              fit: BoxFit.contain,
+            ),
+          ),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "I’m facing problem when ever click on button then it should on LED light of ESP32 with Bluetooth but its not working if anyone have solution please comment down. appreciate any help thanks in advance.",
+                  style: TextStyle(color: AppColors.txtColor),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2, color: AppColors.primaryColor),
+                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.primaryColor,
+                      ),
+                      child: Text(
+                        "#Iot",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, wordSpacing: 1),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2, color: AppColors.primaryColor),
+                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.primaryColor,
+                      ),
+                      child: Text(
+                        "#Circuit",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, wordSpacing: 1),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2, color: AppColors.primaryColor),
+                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.primaryColor,
+                      ),
+                      child: Text(
+                        "#ESP32",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, wordSpacing: 1),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4)),
+                      hintText: AppTitles.comment,
+                      hintStyle: TextStyle(
+                          color: AppColors.graybox,
+                          fontWeight: FontWeight.bold)),
+                  style: TextStyle(color: AppColors.graybox),
+                ),
+              ),
+              Container(
+                height: 150,
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                color: AppColors.commentbox,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Text(
+                    "Step:1 Try running the flutter build web command in your project and inspect the build folder. Assuming a pubspec.yaml with following asset configurations.\nStep: 2 Ensure the files as shown above are available in your server where this folder is hosted. Also verify if the server has any configurations to be made specifically for image files or types of images files.",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                        fontSize: 16,
+                        wordSpacing: 1,
+                        color: AppColors.txtColor),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Navigator.pushReplacement(context,
+                    //     MaterialPageRoute(builder: (context) => AllProductsScreen()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.dangerColor,
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.delete,
+                        size: 32,
+                        color: AppColors.txtColor,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -393,7 +570,7 @@ class Prosonal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // Community Posts Title start
-      margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 8.0),
+      margin: EdgeInsets.symmetric(vertical: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -483,8 +660,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(
-          horizontal: 12, vertical: 8), // Margin between cards
+      margin: EdgeInsets.symmetric(vertical: 8), // Margin between cards
       decoration: BoxDecoration(
         color: AppColors.backgroundColor, // Background color of the card
         borderRadius: BorderRadius.circular(8), // Rounded corners
@@ -574,28 +750,19 @@ class ProductCard extends StatelessWidget {
   }
 }
 
-class MyProduct extends StatelessWidget {
-  const MyProduct({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      //Future Product title Start
-      margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "My Products",
-            style: TextStyle(
-                color: AppColors.txtColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
+// Section Header Widget with Explore Button
+Widget _buildSectionHeader(String title) {
+  return Container(
+    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+      ],
+    ),
+  );
 }

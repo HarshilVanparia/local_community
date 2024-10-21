@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
+import 'package:local_community/Screens/productsscreen.dart';
 
 class MyAllWidget extends StatelessWidget {
   const MyAllWidget({super.key});
@@ -328,6 +329,57 @@ class MyAllWidget extends StatelessWidget {
             onPressed: () {},
           ),
         ],
+      ),
+    );
+  }
+}
+
+
+// Section Categories List
+class Categories_List extends StatelessWidget {
+  const Categories_List({
+    super.key,
+    required this.items,
+  });
+
+  final List<Map<String, String>> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ListView.builder(
+        shrinkWrap: true, // Important for proper height
+        physics:
+            NeverScrollableScrollPhysics(), // Prevent scrolling inside scrollable parent
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            minVerticalPadding: 24,
+            leading: CircleAvatar(
+              radius: 30, // radius as required
+              backgroundColor: AppColors.primaryColor,
+              child: ClipOval(
+                child: Image.asset(
+                  items[index]['icon']!, // Custom icon from the list
+                  fit: BoxFit.cover, // Ensures the whole image is visible
+                  width: 38, // Adjust based on the size you need
+                  height: 38,
+                ),
+              ),
+            ),
+            title: Text(
+              items[index]['title']!, // Title of item
+              style: TextStyle(fontSize: 18, color: AppColors.txtColor),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductsScreen(),
+                  ));
+            },
+          );
+        },
       ),
     );
   }

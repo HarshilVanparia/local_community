@@ -9,6 +9,7 @@ import 'package:local_community/Screens/communitypostscreen.dart';
 import 'package:local_community/Screens/productdetailsscreen.dart';
 import 'package:local_community/Screens/productsscreen.dart';
 import 'package:local_community/Screens/profilescreen.dart';
+import 'package:local_community/Screens/widgetsscreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -82,7 +83,7 @@ class _HomSscreenState extends State<HomeScreen>
                 children: [
                   // Future Products Section
                   _buildSectionHeader('Future Products', onTap: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => AllProductsScreen()));
@@ -93,7 +94,7 @@ class _HomSscreenState extends State<HomeScreen>
 
                   // Categories Section
                   _buildSectionHeader('Categories', onTap: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Categoriesscreen()));
@@ -104,8 +105,6 @@ class _HomSscreenState extends State<HomeScreen>
 
                   // Community Post Section
                   _buildSectionHeader('Community Post', onTap: () {}),
-                  SizedBox(height: 8),
-                  // Community_Posts_Title(),
                   SizedBox(height: 8),
                   Community_Post(),
                   SizedBox(height: 100),
@@ -285,9 +284,14 @@ class CircularMenuButton extends StatelessWidget {
 }
 
 class Community_Post extends StatelessWidget {
-  const Community_Post({
-    super.key,
-  });
+  final List<Map<String, dynamic>> tags = [
+    {"text": "#ESP32"},
+    {"text": "#Iot"},
+    {"text": "#Circuit"},
+    {"text": "#Android"},
+    {"text": "#AndroidStudio"},
+    {"text": "#ESP32Module"},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -342,12 +346,13 @@ class Community_Post extends StatelessWidget {
                   style: TextStyle(color: AppColors.txtColor),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: tags.map((item) {
+                    return Container(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         border:
@@ -356,40 +361,12 @@ class Community_Post extends StatelessWidget {
                         color: AppColors.primaryColor,
                       ),
                       child: Text(
-                        "#Iot",
+                        item['text'], // Text from data
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16, wordSpacing: 1),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2, color: AppColors.primaryColor),
-                        borderRadius: BorderRadius.circular(6),
-                        color: AppColors.primaryColor,
-                      ),
-                      child: Text(
-                        "#Circuit",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, wordSpacing: 1),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2, color: AppColors.primaryColor),
-                        borderRadius: BorderRadius.circular(6),
-                        color: AppColors.primaryColor,
-                      ),
-                      child: Text(
-                        "#ESP32",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, wordSpacing: 1),
-                      ),
-                    ),
-                  ],
+                    );
+                  }).toList(),
                 ),
               ),
               Padding(
@@ -432,213 +409,6 @@ class Community_Post extends StatelessWidget {
     );
   }
 }
-
-// class Community_Posts_Title extends StatelessWidget {
-//   const Community_Posts_Title({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       // Community Posts Title start
-//       margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 8.0),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Text(
-//             "Community Posts",
-//             style: TextStyle(
-//                 color: AppColors.txtColor,
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.bold),
-//           ),
-//           ElevatedButton.icon(
-//             onPressed: () {
-//               Navigator.pushReplacement(
-//                   context,
-//                   MaterialPageRoute(
-//                       builder: (context) => CommunityPostScreen()));
-//             },
-//             label: Text(
-//               AppTitles.explore,
-//               style: TextStyle(color: AppColors.backgroundColor),
-//               textAlign: TextAlign.center,
-//             ),
-//             icon: Icon(
-//               Icons.arrow_forward_ios,
-//               color: AppColors.backgroundColor,
-//               size: 12,
-//             ),
-//             iconAlignment: IconAlignment.end,
-//             style: ElevatedButton.styleFrom(
-//               backgroundColor: (AppColors.primaryColor),
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(4),
-//               ),
-//               elevation: 5,
-//               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-class Categories_List extends StatelessWidget {
-  const Categories_List({
-    super.key,
-    required this.items,
-  });
-
-  final List<Map<String, String>> items;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        shrinkWrap: true, // Important for proper height
-        physics:
-            NeverScrollableScrollPhysics(), // Prevent scrolling inside scrollable parent
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            minVerticalPadding: 24,
-            leading: CircleAvatar(
-              radius: 30, // radius as required
-              backgroundColor: AppColors.primaryColor,
-              child: ClipOval(
-                child: Image.asset(
-                  items[index]['icon']!, // Custom icon from the list
-                  fit: BoxFit.cover, // Ensures the whole image is visible
-                  width: 38, // Adjust based on the size you need
-                  height: 38,
-                ),
-              ),
-            ),
-            title: Text(
-              items[index]['title']!, // Title of item
-              style: TextStyle(fontSize: 18, color: AppColors.txtColor),
-            ),
-            onTap: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProductsScreen(),
-                  ));
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-
-// class Categories_Title extends StatelessWidget {
-//   const Categories_Title({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       // Categories Title start
-//       margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 4.0),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Text(
-//             "Categories",
-//             style: TextStyle(
-//                 color: AppColors.txtColor,
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.bold),
-//           ),
-//           ElevatedButton.icon(
-//             onPressed: () {
-//               Navigator.pushReplacement(
-//                   context,
-//                   MaterialPageRoute(
-//                     builder: (context) => Categoriesscreen(),
-//                   ));
-//             },
-//             label: Text(
-//               AppTitles.explore,
-//               style: TextStyle(color: AppColors.backgroundColor),
-//               textAlign: TextAlign.center,
-//             ),
-//             icon: Icon(
-//               Icons.arrow_forward_ios,
-//               color: AppColors.backgroundColor,
-//               size: 12,
-//             ),
-//             iconAlignment: IconAlignment.end,
-//             style: ElevatedButton.styleFrom(
-//               backgroundColor: (AppColors.primaryColor),
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(4),
-//               ),
-//               elevation: 5,
-//               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class Future_Product_title extends StatelessWidget {
-//   const Future_Product_title({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       //Future Product title Start
-//       margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 4.0),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Text(
-//             "Future Products",
-//             style: TextStyle(
-//                 color: AppColors.txtColor,
-//                 fontSize: 20,
-//                 fontWeight: FontWeight.bold),
-//           ),
-//           ElevatedButton.icon(
-//             onPressed: () {
-//               Navigator.pushReplacement(context,
-//                   MaterialPageRoute(builder: (context) => AllProductsScreen()));
-//             },
-//             label: Text(
-//               AppTitles.explore,
-//               style: TextStyle(color: AppColors.backgroundColor),
-//               textAlign: TextAlign.center,
-//             ),
-//             icon: Icon(
-//               Icons.arrow_forward_ios,
-//               color: AppColors.backgroundColor,
-//               size: 12,
-//             ),
-//             iconAlignment: IconAlignment.end,
-//             style: ElevatedButton.styleFrom(
-//               backgroundColor: (AppColors.primaryColor),
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(4),
-//               ),
-//               elevation: 5,
-//               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 class Products extends StatelessWidget {
   const Products({
@@ -704,7 +474,7 @@ class ProductCard extends StatelessWidget {
               topRight: Radius.circular(6),
             ),
             child: Container(
-              height: 270,
+              height: 180,
               child: Image.asset(
                 imageUrl,
                 height: double.infinity, // Adjust the height to your liking
@@ -749,7 +519,7 @@ class ProductCard extends StatelessWidget {
                   height: 35,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProductDetailsScreen()));

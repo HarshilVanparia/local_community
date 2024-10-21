@@ -70,6 +70,7 @@ class _CategoriesscreenState extends State<Categoriesscreen>
             // Scrollable content
             SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(height: 8),
                   // Categories_Title(),
@@ -321,9 +322,9 @@ class CircularMenuButton extends StatelessWidget {
 // Section Header for Categories
 Widget _buildSectionHeader(String title) {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+    margin: EdgeInsets.symmetric(horizontal: 35.0, vertical: 8.0),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
@@ -347,15 +348,15 @@ Widget _buildCategoryCard({
   return Container(
     margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
               onPressed: onTap1,
               child: Container(
-                width: 152,
-                height: 152,
+                width: 150,
+                height: 150,
                 decoration: BoxDecoration(
                   border: Border.all(
                     style: BorderStyle.solid,
@@ -371,19 +372,26 @@ Widget _buildCategoryCard({
                     CircleAvatar(
                       radius: 30, // radius as required
                       backgroundColor: AppColors.primaryColor,
-                      child: Image.asset(
-                        imageAsset1,
-                        fit: BoxFit.cover, // Ensures the whole image is visible
-                        width: 38, // Adjust based on the size you need
-                        height: 38,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Image.asset(
+                          imageAsset1,
+                          fit: BoxFit
+                              .cover, // Ensures the whole image is visible
+                          width: 50, // Adjust based on the size you need
+                          height: 50,
+                        ),
                       ),
                     ),
-                    Text(
-                      title1,
-                      style: TextStyle(
-                        color: AppColors.txtColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Text(
+                        title1,
+                        style: TextStyle(
+                          color: AppColors.txtColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ],
@@ -393,8 +401,8 @@ Widget _buildCategoryCard({
             TextButton(
               onPressed: onTap2,
               child: Container(
-                width: 152,
-                height: 152,
+                width: 150,
+                height: 150,
                 decoration: BoxDecoration(
                   border: Border.all(
                     style: BorderStyle.solid,
@@ -410,19 +418,26 @@ Widget _buildCategoryCard({
                     CircleAvatar(
                       radius: 30, // radius as required
                       backgroundColor: AppColors.primaryColor,
-                      child: Image.asset(
-                        imageAsset2,
-                        fit: BoxFit.cover, // Ensures the whole image is visible
-                        width: 38, // Adjust based on the size you need
-                        height: 38,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Image.asset(
+                          imageAsset2,
+                          fit: BoxFit
+                              .cover, // Ensures the whole image is visible
+                          width: 50, // Adjust based on the size you need
+                          height: 50,
+                        ),
                       ),
                     ),
-                    Text(
-                      title2,
-                      style: TextStyle(
-                        color: AppColors.txtColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Text(
+                        title2,
+                        style: TextStyle(
+                          color: AppColors.txtColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ],
