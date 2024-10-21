@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/allproductsscreen.dart';
@@ -8,14 +7,14 @@ import 'package:local_community/Screens/communitypostscreen.dart';
 import 'package:local_community/Screens/homescreen.dart';
 import 'package:local_community/Screens/profilescreen.dart';
 
-class UploadProductScreen extends StatefulWidget {
-  const UploadProductScreen({super.key});
+class EditProfileScreen extends StatefulWidget {
+  const EditProfileScreen({super.key});
 
   @override
-  State<UploadProductScreen> createState() => _UploadProductScreenState();
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _UploadProductScreenState extends State<UploadProductScreen>
+class _EditProfileScreenState extends State<EditProfileScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool isMenuOpen = false;
@@ -54,10 +53,10 @@ class _UploadProductScreenState extends State<UploadProductScreen>
             children: [
               // IconButton(
               //   onPressed: () {
-              //     Navigator.pushReplacement(
-              //         context,
-              //         MaterialPageRoute(
-              //             builder: (context) => AllProductsScreen()));
+              //     // Navigator.pushReplacement(
+              //     //     context,
+              //     //     MaterialPageRoute(
+              //     //         builder: (context) => AllProductsScreen()));
               //   },
               //   icon: Icon(
               //     Icons.arrow_back,
@@ -85,10 +84,17 @@ class _UploadProductScreenState extends State<UploadProductScreen>
               child: Column(
                 children: [
                   SizedBox(height: 8),
-                  UploadProduct(),
+                  SizedBox(
+                      width: 125,
+                      height: 125,
+                      child: CircleAvatar(backgroundImage: AssetImage(goku))),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  EditProfile(),
                   SizedBox(height: 16),
                   SizedBox(
-                    height: 28,
+                    height: 100,
                   ),
                 ],
               ),
@@ -224,16 +230,15 @@ class CircularMenuButton extends StatelessWidget {
   }
 }
 
-class UploadProduct extends StatefulWidget {
-  const UploadProduct({super.key});
+class EditProfile extends StatefulWidget {
+  const EditProfile({super.key});
 
   @override
-  State<UploadProduct> createState() => _UploadProductState();
+  State<EditProfile> createState() => _EditProfileState();
 }
 
-class _UploadProductState extends State<UploadProduct> {
+class _EditProfileState extends State<EditProfile> {
   // List of items in the dropdown
-  final List<String> items = ['Iot', '3D Printing', 'Circuit', 'Art'];
 
   // Variable to hold the selected value
   String? selectedItem;
@@ -249,7 +254,7 @@ class _UploadProductState extends State<UploadProduct> {
             height: 32,
           ),
           Text(
-            "Upload Product",
+            "Personal Details",
             style: TextStyle(
                 color: AppColors.txtColor,
                 fontSize: 24,
@@ -275,7 +280,7 @@ class _UploadProductState extends State<UploadProduct> {
                   height: 10,
                 ),
                 Text(
-                  productTitle.ptitle,
+                  "First Name",
                   style: TextStyle(
                       color: AppColors.backgroundColor,
                       fontSize: 18,
@@ -295,7 +300,7 @@ class _UploadProductState extends State<UploadProduct> {
                       borderRadius: BorderRadius.circular(6)),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: productTitle.pname,
+                      hintText: "Harshil",
                       hintStyle: TextStyle(
                         color: AppColors.primaryColor,
                       ),
@@ -311,58 +316,7 @@ class _UploadProductState extends State<UploadProduct> {
                   height: 10,
                 ),
                 Text(
-                  productTitle.pcategorytitle,
-                  style: TextStyle(
-                      color: AppColors.backgroundColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2, color: AppColors.backgroundColor),
-                      color: AppColors.backgroundColor,
-                      borderRadius: BorderRadius.circular(6)),
-                  child: DropdownButton<String>(
-                    iconEnabledColor: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(4),
-                    hint: Text(
-                      "Select " + productTitle.pcategorytitle,
-                      style: TextStyle(
-                          color: AppColors.primaryColor, fontSize: 16),
-                    ),
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                    ),
-
-                    isExpanded: true,
-                    focusColor: AppColors.primaryColor,
-                    dropdownColor: AppColors.backgroundColor,
-                    value: selectedItem, // Currently selected item
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedItem = newValue; // Update the selected item
-                      });
-                    },
-                    items: items.map((String item) {
-                      return DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  productTitle.pdescript,
+                  "Last Name",
                   style: TextStyle(
                       color: AppColors.backgroundColor,
                       fontSize: 18,
@@ -382,7 +336,7 @@ class _UploadProductState extends State<UploadProduct> {
                       borderRadius: BorderRadius.circular(6)),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'Enter ' + productTitle.pname,
+                      hintText: "Vanparia",
                       hintStyle: TextStyle(
                         color: AppColors.primaryColor,
                       ),
@@ -398,7 +352,7 @@ class _UploadProductState extends State<UploadProduct> {
                   height: 10,
                 ),
                 Text(
-                  productTitle.pimg,
+                  "Address",
                   style: TextStyle(
                       color: AppColors.backgroundColor,
                       fontSize: 18,
@@ -410,14 +364,92 @@ class _UploadProductState extends State<UploadProduct> {
                 ),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 50, horizontal: 68),
+                  height: 150,
+                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                   decoration: BoxDecoration(
                       border: Border.all(
                           width: 2, color: AppColors.backgroundColor),
                       color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(6)),
-                  child: Text(
-                    "Choose " + productTitle.pimg,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "Rajkot",
+                      hintStyle: TextStyle(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Country",
+                  style: TextStyle(
+                      color: AppColors.backgroundColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 2, color: AppColors.backgroundColor),
+                      color: AppColors.backgroundColor,
+                      borderRadius: BorderRadius.circular(6)),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "India",
+                      hintStyle: TextStyle(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "City",
+                  style: TextStyle(
+                      color: AppColors.backgroundColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 2, color: AppColors.backgroundColor),
+                      color: AppColors.backgroundColor,
+                      borderRadius: BorderRadius.circular(6)),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "Rajkot",
+                      hintStyle: TextStyle(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
                     style: TextStyle(
                       color: AppColors.primaryColor,
                       fontSize: 16,
@@ -435,9 +467,9 @@ class _UploadProductState extends State<UploadProduct> {
             height: 18,
           ),
           Text(
-            productTitle.brand,
+            "Mobile Number",
             style: TextStyle(
-                color: AppColors.primaryColor,
+                color: AppColors.txtColor,
                 fontSize: 20,
                 fontWeight: FontWeight.bold),
             textAlign: TextAlign.left,
@@ -470,7 +502,64 @@ class _UploadProductState extends State<UploadProduct> {
                       borderRadius: BorderRadius.circular(6)),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'Enter ' + productTitle.brand + ' Name',
+                      hintText: '777777777',
+                      hintStyle: TextStyle(
+                        color: AppColors.txtColor,
+                      ),
+                    ),
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 18,
+          ),
+          Text(
+            "Email Address",
+            style: TextStyle(
+                color: AppColors.txtColor,
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.left,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
+            width: double.infinity,
+            decoration: BoxDecoration(
+                border: Border.all(width: 2, color: AppColors.txtColor),
+                color: AppColors.txtColor,
+                borderRadius: BorderRadius.circular(6)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 2, color: AppColors.backgroundColor),
+                      color: AppColors.backgroundColor,
+                      borderRadius: BorderRadius.circular(6)),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'hvanpariya647@rku.ac.in',
                       hintStyle: TextStyle(
                         color: AppColors.primaryColor,
                       ),
@@ -503,7 +592,7 @@ class _UploadProductState extends State<UploadProduct> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "UPLOAD",
+                  "SAVE CHANGES",
                   style: TextStyle(
                       color: AppColors.backgroundColor,
                       fontSize: 20,
@@ -513,7 +602,7 @@ class _UploadProductState extends State<UploadProduct> {
             ),
           ),
           SizedBox(
-            height: 150,
+            height: 10,
           ),
         ],
       ),

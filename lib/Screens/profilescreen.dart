@@ -4,6 +4,7 @@ import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/allproductsscreen.dart';
 import 'package:local_community/Screens/categoriesscreen.dart';
 import 'package:local_community/Screens/communitypostscreen.dart';
+import 'package:local_community/Screens/editprofilescreen.dart';
 import 'package:local_community/Screens/homescreen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -583,10 +584,8 @@ class Prosonal extends StatelessWidget {
           ),
           ElevatedButton.icon(
             onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CommunityPostScreen()));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => EditProfileScreen()));
             },
             label: Text(
               "Edit",

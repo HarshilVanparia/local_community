@@ -440,7 +440,7 @@ class _UploadPostState extends State<UploadPost> {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 100,
           ),
         ],
       ),
