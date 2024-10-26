@@ -1,339 +1,224 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
+import 'package:local_community/Screens/allproductsscreen.dart';
+import 'package:local_community/Screens/categoriesscreen.dart';
+import 'package:local_community/Screens/communitypostscreen.dart';
+import 'package:local_community/Screens/homescreen.dart';
+import 'package:local_community/Screens/productdetailsscreen.dart';
 import 'package:local_community/Screens/productsscreen.dart';
+import 'package:local_community/Screens/profilescreen.dart';
 
-class MyAllWidget extends StatelessWidget {
-  const MyAllWidget({super.key});
+// FloatingCircularMenu Start
+class FloatingCircularMenu extends StatefulWidget {
+  const FloatingCircularMenu({Key? key}) : super(key: key);
+
+  @override
+  _FloatingCircularMenuState createState() => _FloatingCircularMenuState();
+}
+
+class _FloatingCircularMenuState extends State<FloatingCircularMenu>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  bool isMenuOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+  }
+
+  void toggleMenu() {
+    setState(() {
+      isMenuOpen = !isMenuOpen;
+      isMenuOpen ? _controller.forward() : _controller.reverse();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Future Products Section
-              _buildSectionHeader('Future Products', onTap: () {}),
-              SizedBox(height: 8),
-              _buildFutureProducts(),
-
-              SizedBox(height: 24),
-
-              // Categories Section
-              _buildSectionHeader('Categories', onTap: () {}),
-              SizedBox(height: 8),
-              _buildCategories(),
-
-              SizedBox(height: 24),
-
-              // Community Posts Section
-              _buildSectionHeader('Community Posts', onTap: () {}),
-              SizedBox(height: 8),
-              _buildCommunityPosts(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Section Header Widget with Explore Button
-  Widget _buildSectionHeader(String title, {required Function() onTap}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      alignment: Alignment.bottomCenter,
       children: [
-        Text(
-          title,
-          style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        ElevatedButton.icon(
-          onPressed: () {
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => AllProductsScreen()));
-          },
-          label: Text(
-            AppTitles.explore,
-            style: TextStyle(color: AppColors.backgroundColor),
-            textAlign: TextAlign.center,
+        // Buttons positioned in a half-circle
+        if (isMenuOpen) ...[
+          _buildCircularMenuItem(
+            icon: Icons.category,
+            label: "Categories",
+            leftOffset: -120,
+            bottomOffset: 150,
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Categoriesscreen()),
+              );
+            },
           ),
-          icon: Icon(
-            Icons.arrow_forward_ios,
-            color: AppColors.backgroundColor,
-            size: 12,
+          _buildCircularMenuItem(
+            icon: Icons.propane_rounded,
+            label: "Products",
+            leftOffset: 60,
+            bottomOffset: 150,
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => AllProductsScreen()),
+              );
+            },
           ),
-          iconAlignment: IconAlignment.end,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: (AppColors.primaryColor),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
-            ),
-            elevation: 5,
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          _buildCircularMenuItem(
+            icon: Icons.person,
+            label: "Profile",
+            leftOffset: -160,
+            bottomOffset: 60,
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+            },
           ),
-        ),
-      ],
-    );
-  }
-
-  // Future Products Grid
-  Widget _buildFutureProducts() {
-    return SizedBox(
-      height: 220,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _buildProductCard('HASTHIP', '₹1,999', 'assets/futureProduct1.png'),
-          _buildProductCard(
-              'Bitdefender', '₹3,199', 'assets/futureProduct2.png'),
+          _buildCircularMenuItem(
+            icon: Icons.post_add,
+            label: "Posts",
+            leftOffset: 100,
+            bottomOffset: 60,
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => CommunityPostScreen()),
+              );
+            },
+          ),
+          _buildCircularMenuItem(
+            icon: Icons.home,
+            label: "Home",
+            leftOffset: -30,
+            bottomOffset: 160,
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            },
+          ),
         ],
-      ),
-    );
-  }
-
-  // Product Card
-  Widget _buildProductCard(String title, String price, String imageUrl) {
-    return Container(
-      width: 160,
-      margin: EdgeInsets.only(right: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.amber, width: 2),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-            child: Image.asset(
-              imageUrl,
-              height: 120,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: TextStyle(color: Colors.black87)),
-                SizedBox(height: 4),
-                Text(price, style: TextStyle(color: Colors.black87)),
-              ],
-            ),
-          ),
-          Spacer(),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(16),
-                    bottomRight: Radius.circular(16)),
+        // Main Bottom-Center Button
+        Positioned(
+          height: 66,
+          width: 66,
+          bottom: 40,
+          child: FloatingActionButton(
+            onPressed: toggleMenu,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: Icon(
+                isMenuOpen ? Icons.close : Icons.home,
+                size: 32,
+                key: ValueKey<bool>(isMenuOpen),
               ),
             ),
-            child: Text(AppTitles.readmore),
           ),
-        ],
-      ),
-    );
-  }
-
-  // Categories List
-  Widget _buildCategories() {
-    return Column(
-      children: [
-        _buildCategoryItem('Electronics', 'assets/electronics.png'),
-        _buildCategoryItem('IOT', 'assets/iot.png'),
-        _buildCategoryItem('Circuit', 'assets/circuit.png'),
+        ),
       ],
     );
   }
 
-  // Category Item
-  Widget _buildCategoryItem(String title, String icon) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.amber,
-        child: ClipOval(
-          child: Image.asset(icon, fit: BoxFit.contain),
-        ),
+  // _buildCircularMenuItem Start
+  Widget _buildCircularMenuItem({
+    required IconData icon,
+    required String label,
+    required double leftOffset,
+    required double bottomOffset,
+    required VoidCallback onPressed,
+  }) {
+    return Positioned(
+      left: MediaQuery.of(context).size.width / 2 + leftOffset,
+      bottom: bottomOffset,
+      child: CircularMenuButton(
+        icon: icon,
+        label: label,
+        onPressed: onPressed,
       ),
-      title: Text(title, style: TextStyle(color: Colors.white)),
-      onTap: () {},
     );
   }
+  // _buildCircularMenuItem End
+}
 
-  // Community Posts
-  Widget _buildCommunityPosts() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 22.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        border: Border.all(
-            color: AppColors.txtColor, width: 1, style: BorderStyle.solid),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: Row(
+// CircularMenuButton Start
+class CircularMenuButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onPressed;
+
+  const CircularMenuButton({
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 70, // Adjust as needed for your design
+        height: 70,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(20),
+          color:
+              AppColors.primaryColor, // Or any color for the button background
+        ),
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 32,
+              color: AppColors.backgroundColor,
+            ),
+            const SizedBox(height: 4),
+            OverflowBar(
+              spacing: 5,
+              overflowSpacing: 5,
+              overflowDirection: VerticalDirection.down,
+              overflowAlignment: OverflowBarAlignment.center,
+              alignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: CircleAvatar(backgroundImage: AssetImage(user))),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  "kachra seth",
+                AutoSizeText(
+                  label,
+                  maxLines: 1,
                   style: TextStyle(
-                    color: AppColors.txtColor,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
+                    fontSize:
+                        12, // Set the max size; it will scale down as needed
+                    color: AppColors.backgroundColor,
+                    fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
+                  minFontSize: 10, // Minimum font size to prevent overflow
+                  overflow: TextOverflow.clip,
                 ),
               ],
             ),
-          ),
-          Container(
-            color: AppColors.txtColor,
-            height: 350,
-            child: Image.asset(
-              width: double.infinity,
-              height: 250,
-              post,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  "I’m facing problem when ever click on button then it should on LED light of ESP32 with Bluetooth but its not working if anyone have solution please comment down. appreciate any help thanks in advance.",
-                  style: TextStyle(color: AppColors.txtColor),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2, color: AppColors.primaryColor),
-                        borderRadius: BorderRadius.circular(6),
-                        color: AppColors.primaryColor,
-                      ),
-                      child: Text(
-                        "#Iot",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, wordSpacing: 1),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2, color: AppColors.primaryColor),
-                        borderRadius: BorderRadius.circular(6),
-                        color: AppColors.primaryColor,
-                      ),
-                      child: Text(
-                        "#Circuit",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, wordSpacing: 1),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2, color: AppColors.primaryColor),
-                        borderRadius: BorderRadius.circular(6),
-                        color: AppColors.primaryColor,
-                      ),
-                      child: Text(
-                        "#ESP32",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, wordSpacing: 1),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4)),
-                      hintText: AppTitles.comment,
-                      hintStyle: TextStyle(
-                          color: AppColors.graybox,
-                          fontWeight: FontWeight.bold)),
-                  style: TextStyle(color: AppColors.graybox),
-                ),
-              ),
-              Container(
-                height: 150,
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                color: AppColors.commentbox,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Text(
-                    "Step:1 Try running the flutter build web command in your project and inspect the build folder. Assuming a pubspec.yaml with following asset configurations.\nStep: 2 Ensure the files as shown above are available in your server where this folder is hosted. Also verify if the server has any configurations to be made specifically for image files or types of images files.",
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                        fontSize: 16,
-                        wordSpacing: 1,
-                        color: AppColors.txtColor),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Floating Bottom Navigation Bar
-  Widget _buildFloatingBottomNavigationBar() {
-    return BottomAppBar(
-      shape: CircularNotchedRectangle(),
-      notchMargin: 8.0,
-      color: Colors.black87,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: Icon(Icons.home, color: Colors.amber),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.amber),
-            onPressed: () {},
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
-
+// CircularMenuButton End
 
 // Section Categories List
 class Categories_List extends StatelessWidget {
@@ -384,3 +269,451 @@ class Categories_List extends StatelessWidget {
     );
   }
 }
+
+// Section Community Posts
+class Community_Posts extends StatelessWidget {
+  // final List<Map<String, dynamic>> tags = [
+  //   {"text": "#ESP32"},
+  //   {"text": "#Iot"},
+  //   {"text": "#Circuit"},
+  //   {"text": "#Android"},
+  //   {"text": "#AndroidStudio"},
+  //   {"text": "#ESP32Module"},
+  // ];
+  final String userName;
+  final String userAvatar;
+  final String postImage;
+  final String postContent;
+  final List<Map<String, dynamic>> tags;
+  final String commentContent;
+
+  // Constructor to pass different values to the widget
+  Community_Posts({
+    required this.userName,
+    required this.userAvatar,
+    required this.postImage,
+    required this.postContent,
+    required this.tags,
+    required this.commentContent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 22.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        border: Border.all(
+            color: AppColors.txtColor, width: 1, style: BorderStyle.solid),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              children: [
+                SizedBox(
+                    width: 32,
+                    height: 32,
+                    child:
+                        CircleAvatar(backgroundImage: AssetImage(userAvatar))),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  userName,
+                  style: TextStyle(
+                    color: AppColors.txtColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: AppColors.txtColor,
+            height: 350,
+            child: Image.asset(
+              width: double.infinity,
+              height: 250,
+              postImage,
+              fit: BoxFit.contain,
+            ),
+          ),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  postContent,
+                  style: TextStyle(color: AppColors.txtColor),
+                  textAlign: TextAlign.justify,
+                ),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: tags.map((item) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      margin: EdgeInsets.symmetric(horizontal: 8.0),
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2, color: AppColors.primaryColor),
+                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.primaryColor,
+                      ),
+                      child: Text(
+                        item['text'], // Text from data
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, wordSpacing: 1),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4)),
+                      hintText: AppTitles.comment,
+                      hintStyle: TextStyle(
+                          color: AppColors.graybox,
+                          fontWeight: FontWeight.bold)),
+                  style: TextStyle(color: AppColors.graybox),
+                ),
+              ),
+              Container(
+                height: 150,
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                color: AppColors.commentbox,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Text(
+                    commentContent,
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                        fontSize: 16,
+                        wordSpacing: 1,
+                        color: AppColors.txtColor),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Community Post Reusable Widget Start
+class Community_Post extends StatelessWidget {
+  final List<Map<String, dynamic>> tags = [
+    {"text": "#ESP32"},
+    {"text": "#Iot"},
+    {"text": "#Circuit"},
+    {"text": "#Android"},
+    {"text": "#AndroidStudio"},
+    {"text": "#ESP32Module"},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 22.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        border: Border.all(
+            color: AppColors.txtColor, width: 1, style: BorderStyle.solid),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              children: [
+                SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: CircleAvatar(backgroundImage: AssetImage(user))),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  postTitle.puser,
+                  style: TextStyle(
+                    color: AppColors.txtColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: AppColors.txtColor,
+            height: 350,
+            child: Image.asset(
+              width: double.infinity,
+              height: 250,
+              post,
+              fit: BoxFit.contain,
+            ),
+          ),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  postTitle.postContent,
+                  style: TextStyle(color: AppColors.txtColor),
+                ),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: tags.map((item) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      margin: EdgeInsets.symmetric(horizontal: 8.0),
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2, color: AppColors.primaryColor),
+                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.primaryColor,
+                      ),
+                      child: Text(
+                        item['text'], // Text from data
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, wordSpacing: 1),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4)),
+                      hintText: AppTitles.comment,
+                      hintStyle: TextStyle(
+                          color: AppColors.graybox,
+                          fontWeight: FontWeight.bold)),
+                  style: TextStyle(color: AppColors.graybox),
+                ),
+              ),
+              Container(
+                height: 150,
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                color: AppColors.commentbox,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Text(
+                    postTitle.postcomments,
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                        fontSize: 16,
+                        wordSpacing: 1,
+                        color: AppColors.txtColor),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+// Community Post Reusable Widget Start
+
+// Community Posts Title Start
+class Community_Posts_Title extends StatelessWidget {
+  const Community_Posts_Title({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // Community Posts Title start
+      margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Community Posts",
+            style: TextStyle(
+                color: AppColors.txtColor,
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+}
+// Community Post Title End
+
+// Products Section Start
+class Products extends StatelessWidget {
+  const Products({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // Product Start
+      padding: const EdgeInsets.all(8.0),
+      child: GridView.count(
+        shrinkWrap:
+            true, // Important to ensure GridView takes only required height
+        crossAxisCount: 2, // Two items per row
+        crossAxisSpacing: 8, // Horizontal spacing between cards
+        mainAxisSpacing: 10, // Vertical spacing between cards
+        childAspectRatio: 0.58, // Controls height/width ratio to match design
+        children: [
+          ProductCard(
+            title: 'HASTHIP',
+            price: '₹1,999',
+            imageUrl: '${futureProduct1}', // Image of product 1
+          ),
+          ProductCard(
+            title: 'Bitdefender',
+            price: '₹3,199',
+            imageUrl: '${futureProduct2}', // Image of product 2
+          ),
+        ],
+      ),
+    );
+  }
+}
+// Product End
+
+// Product card Start
+class ProductCard extends StatelessWidget {
+  final String title;
+  final String price;
+  final String imageUrl;
+
+  ProductCard(
+      {required this.title, required this.price, required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(
+          horizontal: 12, vertical: 8), // Margin between cards
+      decoration: BoxDecoration(
+        color: AppColors.backgroundColor, // Background color of the card
+        borderRadius: BorderRadius.circular(8), // Rounded corners
+        border: Border.all(color: AppColors.primaryColor, width: 2),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment:
+            MainAxisAlignment.spaceBetween, // To make button stick at bottom
+        children: [
+          // Image with rounded corners
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(6),
+              topRight: Radius.circular(6),
+            ),
+            child: Container(
+              height: 180,
+              child: Image.asset(
+                imageUrl,
+                height: double.infinity, // Adjust the height to your liking
+                fit: BoxFit
+                    .cover, // Ensures the image covers the available space
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 2.0, 0, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.txtColor,
+                        ),
+                      ),
+                      SizedBox(height: 8), // Space between title and price
+                      Text(
+                        price,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.txtColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  height: 35,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductDetailsScreen()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          AppColors.primaryColor, // Color of the button
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6))),
+                      padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                      elevation: 2, // Slight elevation for the button
+                    ),
+                    child: Text(
+                      AppTitles.readmore,
+                      style: TextStyle(
+                          color: AppColors.backgroundColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+// Product Card End

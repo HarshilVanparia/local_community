@@ -1,3 +1,4 @@
+const String appicon = "assets/logo.png";
 const String logo = "assets/logo.png";
 const String wing = "assets/wing.png";
 const String google = "assets/Google.png";

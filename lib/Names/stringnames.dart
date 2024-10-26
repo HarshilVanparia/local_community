@@ -48,9 +48,12 @@ class productTitle {
 }
 
 class postTitle {
+  static const String puser = "Kachra seth";
   static const String ptitle = "Post Title";
   static const String ptag = "Post Tags";
   static const String pdescript = "Post Details";
   static const String brand = "Brand";
   static const String pimg = "Product Image";
+  static const String postContent = "I’m facing problem when ever click on button then it should on LED light of ESP32 with Bluetooth but its not working if anyone have solution please comment down. appreciate any help thanks in advance.";
+  static const String postcomments = "Step:1 Try running the flutter build web command in your project and inspect the build folder. Assuming a pubspec.yaml with following asset configurations.\nStep: 2 Ensure the files as shown above are available in your server where this folder is hosted. Also verify if the server has any configurations to be made specifically for image files or types of images files.";
 }
