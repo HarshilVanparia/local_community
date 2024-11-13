@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/homescreen.dart';
+import 'package:local_community/Screens/loginscreen.dart';
+import 'package:local_community/Screens/registerscreen.dart';
 import 'package:local_community/Screens/splashscreen.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
+  MainApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // initialRoute: '/login',
+      // routes: {
+      //   'login':(context)=>LoginScreen(),
+      //   "register":(context)=>RegisterScreen(),
+      //   "home":(context)=>HomeScreen(),
+      // },
       debugShowCheckedModeBanner: false,
       title: 'Local Community',
       theme: ThemeData(
@@ -42,9 +49,10 @@ class MainApp extends StatelessWidget {
             backgroundColor: AppColors.primaryColor,
             foregroundColor: AppColors.backgroundColor),
       ),
-      home: const Scaffold(
-        body: Center(child: HomeScreen()),
+      home: Scaffold(
+        body: Center(child: RegisterScreen()),
       ),
     );
   }
 }
+

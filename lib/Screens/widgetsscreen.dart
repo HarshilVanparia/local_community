@@ -717,3 +717,60 @@ class ProductCard extends StatelessWidget {
   }
 }
 // Product Card End
+
+
+
+// Register Fields Resuable
+
+class CustomTextField extends StatelessWidget {
+  final String hintText;
+  final TextInputType keyboardType;
+  final Color borderColor;
+  final EdgeInsets contentPadding;
+  final bool obscureText;
+  final TextEditingController? controller;
+  final IconData? suffixIcon;
+  final VoidCallback? onSuffixIconPressed;
+
+  CustomTextField({
+    required this.hintText,
+    required this.borderColor,
+    this.keyboardType = TextInputType.text,
+    this.contentPadding = const EdgeInsets.fromLTRB(14, 0, 0, 0),
+    this.obscureText = false,
+    this.controller,
+    this.suffixIcon,
+    this.onSuffixIconPressed, required String? Function(dynamic value) validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      style: TextStyle(
+        color: borderColor,
+      ),
+      decoration: InputDecoration(
+        hintText: hintText,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(70),
+          borderSide: BorderSide(color: borderColor),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(70),
+          borderSide: BorderSide(color: borderColor),
+        ),
+        contentPadding: contentPadding,
+        hintStyle: TextStyle(color: borderColor),
+        suffixIcon: suffixIcon != null
+            ? IconButton(
+                icon: Icon(suffixIcon, color: borderColor),
+                onPressed: onSuffixIconPressed,
+              )
+            : null,
+      ),
+    );
+  }
+}
