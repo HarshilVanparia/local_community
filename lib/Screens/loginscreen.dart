@@ -1,32 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:local_community/Module/loginrequestdata.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
-import 'package:local_community/Screens/homescreen.dart';
 import 'package:local_community/Screens/registerscreen.dart';
+import 'package:local_community/Screens/widgetsscreen.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool _isObscured = true;
+  // Tracks the visibility state of the password
+  final TextEditingController _emailController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
                 // Center the main content
                 child: Container(
                   margin: EdgeInsets.symmetric(
-                      horizontal: 35), // left and right margin
+                      vertical: 75, horizontal: 35), // left and right margin
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Image.asset(
                         wing,
-                        width: 175,
-                        height: 175,
+                        width: 150,
+                        height: 150,
                         alignment: Alignment.center,
                       ),
                       SizedBox(height: 10), // Space between image and text
@@ -50,47 +62,40 @@ class LoginScreen extends StatelessWidget {
                       ),
                       SizedBox(
                           height: 18), // Space before the first input field
-                      TextField(
-                        style: TextStyle(color: AppColors.txtColor),
-                        decoration: InputDecoration(
-                          hintText: "Email",
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(70),
-                            borderSide: BorderSide(color: AppColors.txtColor),
-                          ),
-                          hintStyle: TextStyle(color: AppColors.txtColor),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 14),
-                        ),
+                      CustomTextField(
+                        controller: _emailController,
+                        hintText: "Email",
+                        borderColor: AppColors.txtColor,
                         keyboardType: TextInputType.emailAddress,
+                        validator: (value) =>
+                            value!.isEmpty ? "Please enter your email" : null,
                       ),
                       SizedBox(height: 18), // Space between input fields
-                      TextField(
-                        style: TextStyle(color: AppColors.txtColor),
-                        decoration: InputDecoration(
-                          hintText: "Password",
-                          suffixIcon: Icon(
-                            Icons.visibility_off,
-                            color: AppColors.txtColor,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(70),
-                            borderSide: BorderSide(color: AppColors.txtColor),
-                          ),
-                          hintStyle: TextStyle(color: AppColors.txtColor),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 14),
-                        ),
+                      CustomTextField(
+                        controller: _passwordController,
+                        hintText: "Password",
+                        borderColor: AppColors.txtColor,
                         keyboardType: TextInputType.visiblePassword,
-                        obscureText: true, // Hide the password text
+                        obscureText: _isObscured,
+                        suffixIcon: _isObscured
+                            ? Icons.visibility_off
+                            : Icons.visibility, // Change icon based on state
+                        onSuffixIconPressed: () {
+                          setState(() {
+                            _isObscured =
+                                !_isObscured; // Toggle the visibility state
+                          });
+                        },
+                        validator: (value) => value!.isEmpty
+                            ? "Please enter your password"
+                            : null,
                       ),
                       SizedBox(height: 22), // Space before the submit button
                       ElevatedButton(
                         onPressed: () {
-                          // Navigate to the home screen
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                            ),
+                          LoginRequest loginRequest = LoginRequest(
+                            email: _emailController.text,
+                            password: _passwordController.text,
                           );
                         },
                         child: Text(
@@ -111,38 +116,44 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 20), // Add some vertical padding
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Don’t have an account?",
-                    style: TextStyle(fontSize: 18, color: AppColors.txtColor),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RegisterScreen(),
+              SizedBox(
+                height: 75,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20), // Add some vertical padding
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don’t have an account?",
+                      style: TextStyle(fontSize: 18, color: AppColors.txtColor),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RegisterScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Register",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
-                    child: Text(
-                      "Register",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(
+                      height: 50,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

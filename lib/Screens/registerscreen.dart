@@ -1,11 +1,13 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:local_community/Module/regformdata.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/loginscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
-import 'package:local_community/Services/Services/regdatasend.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,17 +17,94 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final ImagePicker _picker = ImagePicker();
+  File? _imageFile;
+
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _unumberController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   bool _isObscured = true; // Tracks the visibility state of the password
+
+  // image & register form datasend start
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> _registerUser() async {
+    if (_formKey.currentState!.validate()) {
+      if (_imageFile != null) {
+        await _pickAndUploadImage(
+          _unameController.text,
+          _emailController.text,
+          _unumberController.text,
+          _countryController.text,
+          _cityController.text,
+          _addressController.text,
+          _passwordController.text,
+        );
+      } else {
+        print('Please select an image');
+      }
+    }
+  }
+
+  Future<void> _pickAndUploadImage(String uname, String email, String unumber,
+      String country, String city, String address, String upassword) async {
+    if (_imageFile != null) {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://192.168.43.172:3000/register'),
+      );
+
+      // Add text fields
+      request.fields['uname'] = uname;
+      request.fields['email'] = email;
+      request.fields['unumber'] = unumber;
+      request.fields['country'] = country;
+      request.fields['city'] = city;
+      request.fields['address'] = address;
+      request.fields['upassword'] = upassword;
+
+      // Add image file
+      request.files
+          .add(await http.MultipartFile.fromPath('photo', _imageFile!.path));
+
+      var response = await request.send();
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'User registered and image uploaded successfully',
+              style: TextStyle(color: AppColors.txtColor),
+            ),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to register user'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+// end
 
   @override
   Widget build(BuildContext context) {
@@ -152,21 +231,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         SizedBox(
                           height: 18,
                         ),
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: AppColors.primaryColor,
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.image),
+                            onPressed: _pickImage,
+                            style: ButtonStyle(
+                              iconSize: WidgetStatePropertyAll(30),
+                              iconColor: WidgetStatePropertyAll(
+                                  AppColors.backgroundColor),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 18,
+                        ),
                         ElevatedButton(
-                          onPressed: () {
-                            Quotes newUser = Quotes(
-                              uname: _unameController.text,
-                              email: _emailController.text,
-                              unumber: _unumberController.text,
-                              country: _countryController.text,
-                              city: _cityController.text,
-                              address: _addressController.text,
-                              upassword: _passwordController.text,
-                            );
-
-                            registerUser(newUser,
-                                context); // Call the function to register the user
-                          },
+                          onPressed: _registerUser,
                           child: Text(
                             "Submit",
                             style: TextStyle(
@@ -177,7 +262,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           style: ButtonStyle(
                             backgroundColor:
                                 WidgetStatePropertyAll(AppColors.primaryColor),
-                            minimumSize: WidgetStatePropertyAll(Size(450, 55)),
+                            minimumSize: WidgetStatePropertyAll(
+                                Size(double.infinity, 55)),
                           ),
                         ),
                         SizedBox(
@@ -211,8 +297,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           width: 64,
                           height: 64,
                           child: IconButton(
-                            onPressed: () {},
                             icon: Image.asset(google),
+                            onPressed: () {},
                           ),
                         ),
                         SizedBox(
