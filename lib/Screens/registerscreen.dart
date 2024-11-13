@@ -65,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (_imageFile != null) {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.43.172:3000/register'),
+        Uri.parse('http://192.168.171.174:3000/register'),
       );
 
       // Add text fields
@@ -90,9 +90,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               style: TextStyle(color: AppColors.txtColor),
             ),
             backgroundColor: Colors.green,
-            duration: Duration(seconds: 3),
+            duration: Duration(seconds: 2),
           ),
         );
+        // Wait for 2 seconds before navigating
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
+        });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

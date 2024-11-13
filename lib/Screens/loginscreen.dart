@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:local_community/Module/loginrequestdata.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
+import 'package:local_community/Screens/homescreen.dart';
 import 'package:local_community/Screens/registerscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -16,8 +20,41 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isObscured = true;
   // Tracks the visibility state of the password
   final TextEditingController _emailController = TextEditingController();
-
   final TextEditingController _passwordController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+  
+
+  // checking if user already logged in or not
+  void _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+    if (isLoggedIn) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    }
+  }
+
+  // saving all data and move to the next page  
+   void _loginUser(String username, String email, String address, String photoUrl) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', username);
+    await prefs.setString('email', email);
+    await prefs.setString('address', address);
+    await prefs.setString('photoUrl', photoUrl);
+    await prefs.setBool('isLoggedIn', true);
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +129,69 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 22), // Space before the submit button
                       ElevatedButton(
-                        onPressed: () {
-                          LoginRequest loginRequest = LoginRequest(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          );
+                        onPressed: () async {
+                          String email = _emailController.text;
+                          String password = _passwordController.text;
+
+                          if (email.isEmpty || password.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Please enter all fields'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          try {
+                            var response = await http.post(
+                              Uri.parse(
+                                  'http://192.168.171.174:3000/login'), // Your backend login endpoint
+                              headers: {'Content-Type': 'application/json'},
+                              body: jsonEncode(
+                                  {'email': email, 'upassword': password}),
+                            );
+
+                            if (response.statusCode == 200) {
+                              // Successful login
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Login successful'),
+                                  backgroundColor: Colors.green,
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+
+                              // Wait for 2 seconds and then navigate to the home screen
+                              Future.delayed(Duration(seconds: 2), () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          HomeScreen()), // Replace with your desired screen
+                                );
+                              });
+                            } else {
+                              // Login failed
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Login failed. Please check your credentials.'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            // Error handling
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'Error occurred during login. Please try again.'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            print('Error: $e');
+                          }
                         },
                         child: Text(
                           "Login",

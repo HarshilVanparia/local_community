@@ -15,6 +15,7 @@ dependencies:
   google_sign_in: ^5.4.0
   postgres: ^3.4.2
   image_picker: ^1.1.2
+  shared_preferences: ^2.3.3
 
 dev_dependencies:
   flutter_test:
@@ -28,7 +29,4 @@ flutter:
     - assets/categories/
     - assets/appicon/logo.png
 
-flutter_icons:
-  android: true
-  ios: true
-  image_path: "assets/appicon/logo.png"  # Path to your icon image
+

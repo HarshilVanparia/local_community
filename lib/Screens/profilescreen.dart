@@ -3,42 +3,16 @@ import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/editprofilescreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
-
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  bool isMenuOpen = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-  }
-
-  void toggleMenu() {
-    if (mounted) {
-      setState(() {
-        isMenuOpen = !isMenuOpen;
-        isMenuOpen ? _controller.forward() : _controller.reverse();
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+class _ProfileScreenState extends State<ProfileScreen> {
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
         ),
       ),
-      body: SafeArea(
+      body:  SafeArea(
         child: Stack(
           children: [
             // Scrollable content
@@ -89,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 ],
               ),
             ),
-             // BottomNavigation
+            // BottomNavigation
             FloatingCircularMenu()
           ],
         ),
@@ -98,16 +72,36 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 }
 
-
-
 class Profile extends StatefulWidget {
-  const Profile({super.key});
-
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+  String? username;
+  String? email;
+  String? address;
+  String? photoUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProfile();
+  }
+
+  void _loadUserProfile() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  setState(() {
+    username = prefs.getString('username');
+    email = prefs.getString('email');
+    address = prefs.getString('address');
+    photoUrl = prefs.getString('photoUrl');
+    
+    // Debug prints to check if data is retrieved correctly
+    print('Loaded data: $username, $email, $address, $photoUrl');
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -117,15 +111,20 @@ class _ProfileState extends State<Profile> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                  width: 125,
-                  height: 125,
-                  child: CircleAvatar(backgroundImage: AssetImage(goku))),
+              if (photoUrl != null)
+                Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(
+                      photoUrl!,
+                    ),
+                  ),
+                ),
               SizedBox(
                 height: 12,
               ),
               Text(
-                "Sun Goku",
+                '$username',
                 style: TextStyle(
                     color: AppColors.txtColor,
                     fontSize: 24,
@@ -169,7 +168,7 @@ class _ProfileState extends State<Profile> {
                           color: AppColors.backgroundColor,
                           borderRadius: BorderRadius.circular(6)),
                       child: Text(
-                        "hvanpariya647@rku.ac.in",
+                        '$email',
                         style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 16,
@@ -204,7 +203,7 @@ class _ProfileState extends State<Profile> {
                           color: AppColors.backgroundColor,
                           borderRadius: BorderRadius.circular(6)),
                       child: Text(
-                        "Rajkot 360004.",
+                        '$address',
                         style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 16,
