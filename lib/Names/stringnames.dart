@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+class Config {
+  static const String baseImgUrl = "http://192.168.43.217:3000/uploads/";
+  static const String baseUrl = "http://192.168.43.217:3000/register";
+}
+
 class AppColors {
   //defining app color codes
   static const Color backgroundColor = Color(0xFF04061F); // hex color #04061F

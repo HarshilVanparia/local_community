@@ -1,9 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/editprofilescreen.dart';
+import 'package:local_community/Screens/loginscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -12,8 +18,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
- 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-      body:  SafeArea(
+      body: SafeArea(
         child: Stack(
           children: [
             // Scrollable content
@@ -78,10 +82,12 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String? username;
+  String? uname;
   String? email;
   String? address;
-  String? photoUrl;
+  String? photoPath; // Local path of the stored image
+  File? localImageFile; // To store the local image file
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -89,18 +95,30 @@ class _ProfileState extends State<Profile> {
     _loadUserProfile();
   }
 
-  void _loadUserProfile() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  setState(() {
-    username = prefs.getString('username');
-    email = prefs.getString('email');
-    address = prefs.getString('address');
-    photoUrl = prefs.getString('photoUrl');
-    
-    // Debug prints to check if data is retrieved correctly
-    print('Loaded data: $username, $email, $address, $photoUrl');
-  });
-}
+  Future<void> _loadUserProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      uname = prefs.getString('uname');
+      email = prefs.getString('email');
+      address = prefs.getString('address');
+      photoPath = prefs.getString('photo_path');
+    });
+
+    if (photoPath != null) {
+      // Fetch the locally stored image
+      final appDocDir = await getApplicationDocumentsDirectory();
+      final imageFilePath = File('${appDocDir.path}/$photoPath');
+      if (await imageFilePath.exists()) {
+        setState(() {
+          localImageFile = imageFilePath;
+        });
+      }
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,20 +129,21 @@ class _ProfileState extends State<Profile> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (photoUrl != null)
-                Center(
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(
-                      photoUrl!,
-                    ),
-                  ),
+              if (localImageFile != null)
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: FileImage(localImageFile!),
+                )
+              else
+                CircleAvatar(
+                  radius: 50,
+                  child: Icon(Icons.person, size: 50),
                 ),
               SizedBox(
                 height: 12,
               ),
               Text(
-                '$username',
+                uname ?? 'Username not found',
                 style: TextStyle(
                     color: AppColors.txtColor,
                     fontSize: 24,
@@ -168,7 +187,7 @@ class _ProfileState extends State<Profile> {
                           color: AppColors.backgroundColor,
                           borderRadius: BorderRadius.circular(6)),
                       child: Text(
-                        '$email',
+                        email ?? 'email not found',
                         style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 16,
@@ -203,7 +222,7 @@ class _ProfileState extends State<Profile> {
                           color: AppColors.backgroundColor,
                           borderRadius: BorderRadius.circular(6)),
                       child: Text(
-                        '$address',
+                        address ?? 'address not found',
                         style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 16,
@@ -237,8 +256,12 @@ class _ProfileState extends State<Profile> {
           ),
           ElevatedButton(
             onPressed: () {
-              // Navigator.pushReplacement(context,
-              //     MaterialPageRoute(builder: (context) => AllProductsScreen()));
+              Future<void> logout() async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.dangerColor,
@@ -248,7 +271,7 @@ class _ProfileState extends State<Profile> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "DELETE ACCOUNT",
+                  "LOGOUT",
                   style: TextStyle(
                       color: AppColors.txtColor,
                       fontSize: 20,

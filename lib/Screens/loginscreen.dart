@@ -21,12 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   // Tracks the visibility state of the password
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-    _checkLoginStatus();
-  }
-  
 
   // checking if user already logged in or not
   void _checkLoginStatus() async {
@@ -41,19 +35,83 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // saving all data and move to the next page  
-   void _loginUser(String username, String email, String address, String photoUrl) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('username', username);
-    await prefs.setString('email', email);
-    await prefs.setString('address', address);
-    await prefs.setString('photoUrl', photoUrl);
-    await prefs.setBool('isLoggedIn', true);
+  Future<void> _login() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-    );
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter all fields'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    try {
+      var response = await http.post(
+        Uri.parse('http://192.168.43.217:3000/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'upassword': password}),
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+
+        if (responseData.containsKey('uname') &&
+            responseData.containsKey('email') &&
+            responseData.containsKey('address') &&
+            responseData.containsKey('photo_path')) {
+          String uname = responseData['uname'];
+          String email = responseData['email'];
+          String address = responseData['address'];
+          String photoPath = responseData['photo_path'];
+
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('uname', uname);
+          await prefs.setString('email', email);
+          await prefs.setString('address', address);
+          await prefs.setString('photo_path', photoPath);
+          await prefs.setBool('isLoggedIn', true);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Login successful'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Unexpected response format. Please try again.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login failed. Please check your credentials.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error occurred during login. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      print('Error: $e');
+    }
   }
 
   @override
@@ -129,70 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 22), // Space before the submit button
                       ElevatedButton(
-                        onPressed: () async {
-                          String email = _emailController.text;
-                          String password = _passwordController.text;
-
-                          if (email.isEmpty || password.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Please enter all fields'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                            return;
-                          }
-
-                          try {
-                            var response = await http.post(
-                              Uri.parse(
-                                  'http://192.168.171.174:3000/login'), // Your backend login endpoint
-                              headers: {'Content-Type': 'application/json'},
-                              body: jsonEncode(
-                                  {'email': email, 'upassword': password}),
-                            );
-
-                            if (response.statusCode == 200) {
-                              // Successful login
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Login successful'),
-                                  backgroundColor: Colors.green,
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-
-                              // Wait for 2 seconds and then navigate to the home screen
-                              Future.delayed(Duration(seconds: 2), () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          HomeScreen()), // Replace with your desired screen
-                                );
-                              });
-                            } else {
-                              // Login failed
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      'Login failed. Please check your credentials.'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
-                          } catch (e) {
-                            // Error handling
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    'Error occurred during login. Please try again.'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                            print('Error: $e');
-                          }
-                        },
+                        onPressed: _login,
                         child: Text(
                           "Login",
                           style: TextStyle(

@@ -11,34 +11,8 @@ class EditProfileScreen extends StatefulWidget {
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  bool isMenuOpen = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-  }
-
-  void toggleMenu() {
-    if (mounted) {
-      setState(() {
-        isMenuOpen = !isMenuOpen;
-        isMenuOpen ? _controller.forward() : _controller.reverse();
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+class _EditProfileScreenState extends State<EditProfileScreen> {
+ 
 
   @override
   Widget build(BuildContext context) {

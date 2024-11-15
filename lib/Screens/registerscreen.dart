@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/loginscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -17,11 +18,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  bool _isObscured = true; // Tracks the visibility state of the password
   final ImagePicker _picker = ImagePicker();
   File? _imageFile;
-
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -30,9 +30,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
-  bool _isObscured = true; // Tracks the visibility state of the password
-
-  // image & register form datasend start
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -43,72 +40,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _registerUser() async {
-    if (_formKey.currentState!.validate()) {
-      if (_imageFile != null) {
-        await _pickAndUploadImage(
-          _unameController.text,
-          _emailController.text,
-          _unumberController.text,
-          _countryController.text,
-          _cityController.text,
-          _addressController.text,
-          _passwordController.text,
-        );
-      } else {
-        print('Please select an image');
-      }
-    }
-  }
-
-  Future<void> _pickAndUploadImage(String uname, String email, String unumber,
-      String country, String city, String address, String upassword) async {
-    if (_imageFile != null) {
+    if (_formKey.currentState!.validate() && _imageFile != null) {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.171.174:3000/register'),
+        Uri.parse('http://192.168.43.217:3000/register'),
       );
 
-      // Add text fields
-      request.fields['uname'] = uname;
-      request.fields['email'] = email;
-      request.fields['unumber'] = unumber;
-      request.fields['country'] = country;
-      request.fields['city'] = city;
-      request.fields['address'] = address;
-      request.fields['upassword'] = upassword;
-
-      // Add image file
-      request.files
-          .add(await http.MultipartFile.fromPath('photo', _imageFile!.path));
+      request.fields['uname'] = _unameController.text;
+      request.fields['email'] = _emailController.text;
+      request.fields['unumber'] = _unumberController.text;
+      request.fields['country'] = _countryController.text;
+      request.fields['city'] = _cityController.text;
+      request.fields['address'] = _addressController.text;
+      request.fields['upassword'] = _passwordController.text;
+      request.files.add(
+        await http.MultipartFile.fromPath('photo_path', _imageFile!.path),
+      );
 
       var response = await request.send();
       if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'User registered and image uploaded successfully',
-              style: TextStyle(color: AppColors.txtColor),
-            ),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
-        );
-        // Wait for 2 seconds before navigating
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Registration successful'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ));
+
+        // Redirect to LoginScreen
         Future.delayed(Duration(seconds: 2), () {
           Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-          );
+              context, MaterialPageRoute(builder: (context) => LoginScreen()));
         });
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to register user'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Failed to register'),
+          backgroundColor: Colors.red,
+        ));
       }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Please fill all fields and select an image'),
+        backgroundColor: Colors.red,
+      ));
     }
   }
 // end
@@ -238,20 +210,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         SizedBox(
                           height: 18,
                         ),
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: AppColors.primaryColor,
-                          ),
-                          child: IconButton(
-                            icon: Icon(Icons.image),
-                            onPressed: _pickImage,
-                            style: ButtonStyle(
-                              iconSize: WidgetStatePropertyAll(30),
-                              iconColor: WidgetStatePropertyAll(
-                                  AppColors.backgroundColor),
-                            ),
+                        GestureDetector(
+                          onTap: _pickImage,
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundImage: _imageFile != null
+                                ? FileImage(_imageFile!)
+                                : null,
+                            child: _imageFile == null
+                                ? Icon(Icons.camera_alt, size: 50)
+                                : null,
                           ),
                         ),
                         SizedBox(
