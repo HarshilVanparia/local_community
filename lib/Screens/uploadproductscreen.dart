@@ -13,6 +13,8 @@ class UploadProductScreen extends StatefulWidget {
 }
 
 class _UploadProductScreenState extends State<UploadProductScreen> {
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,20 +73,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   }
 }
 
-class CircularMenuButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onPressed;
 
-  CircularMenuButton({required this.icon, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: onPressed,
-      child: Icon(icon),
-    );
-  }
-}
 
 class UploadProduct extends StatefulWidget {
   const UploadProduct({super.key});

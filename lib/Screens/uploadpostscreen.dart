@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/communitypostscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UploadPostScreen extends StatefulWidget {
   const UploadPostScreen({super.key});
@@ -75,11 +80,73 @@ class UploadPost extends StatefulWidget {
 }
 
 class _UploadPostState extends State<UploadPost> {
-  // List of items in the dropdown
-  final List<String> items = ['Iot', '3D Printing', 'Circuit', 'Art'];
+  final TextEditingController _pdetailsController = TextEditingController();
+  final TextEditingController _ptagsController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+  File? _imageFile;
 
-  // Variable to hold the selected value
-  String? selectedItem;
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> _uploadPost() async {
+    if (_imageFile != null &&
+        _pdetailsController.text.isNotEmpty &&
+        _ptagsController.text.isNotEmpty) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? email =
+          prefs.getString('email'); // Retrieve logged-in user's email
+
+      if (email == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Please log in again'),
+          backgroundColor: Colors.red,
+        ));
+        return;
+      }
+
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'http://192.168.171.196:3000/uploadPost'), // Update with your server URL
+      );
+
+      request.fields['email'] = email; // Include the email in the request
+      request.fields['pdetails'] = _pdetailsController.text;
+      request.fields['ptags'] = _ptagsController.text;
+      request.files
+          .add(await http.MultipartFile.fromPath('pimg', _imageFile!.path));
+
+      final response = await request.send();
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Post uploaded successfully'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ));
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => CommunityPostScreen()));
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Failed to upload post'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ));
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Please fill all fields and select an image'),
+        backgroundColor: Colors.red,
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,42 +185,6 @@ class _UploadPostState extends State<UploadPost> {
                   height: 10,
                 ),
                 Text(
-                  postTitle.ptitle,
-                  style: TextStyle(
-                      color: AppColors.backgroundColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.left,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2, color: AppColors.backgroundColor),
-                      color: AppColors.backgroundColor,
-                      borderRadius: BorderRadius.circular(6)),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Enter ' + postTitle.ptitle,
-                      hintStyle: TextStyle(
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
                   postTitle.ptag,
                   style: TextStyle(
                       color: AppColors.backgroundColor,
@@ -173,8 +204,9 @@ class _UploadPostState extends State<UploadPost> {
                       color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(6)),
                   child: TextField(
+                    controller: _ptagsController,
                     decoration: InputDecoration(
-                      hintText: 'Enter ' + postTitle.ptitle,
+                      hintText: 'Enter ' + postTitle.ptag,
                       hintStyle: TextStyle(
                         color: AppColors.primaryColor,
                       ),
@@ -209,6 +241,7 @@ class _UploadPostState extends State<UploadPost> {
                       color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(6)),
                   child: TextField(
+                    controller: _pdetailsController,
                     decoration: InputDecoration(
                       hintText: 'Enter ' + postTitle.pdescript,
                       hintStyle: TextStyle(
@@ -226,7 +259,7 @@ class _UploadPostState extends State<UploadPost> {
                   height: 10,
                 ),
                 Text(
-                  postTitle.pdescript,
+                  "Post Image",
                   style: TextStyle(
                       color: AppColors.backgroundColor,
                       fontSize: 18,
@@ -238,20 +271,16 @@ class _UploadPostState extends State<UploadPost> {
                 ),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 50, horizontal: 68),
                   decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2, color: AppColors.backgroundColor),
                       color: AppColors.backgroundColor,
-                      borderRadius: BorderRadius.circular(6)),
-                  child: Text(
-                    "Choose " + postTitle.pdescript,
-                    style: TextStyle(
-                      color: AppColors.primaryColor,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.justify,
-                  ),
+                      borderRadius: BorderRadius.circular(50)),
+                  child: _imageFile != null
+                      ? Image.file(_imageFile!, height: 200, fit: BoxFit.cover)
+                      : TextButton.icon(
+                          onPressed: _pickImage,
+                          icon: Icon(Icons.add_photo_alternate),
+                          label: Text('Select Image'),
+                        ),
                 ),
                 SizedBox(
                   height: 10,
@@ -266,12 +295,7 @@ class _UploadPostState extends State<UploadPost> {
             height: 18,
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CommunityPostScreen()));
-            },
+            onPressed: _uploadPost,
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(vertical: 12),
             ),

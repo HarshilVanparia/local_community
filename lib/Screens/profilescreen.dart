@@ -255,13 +255,22 @@ class _ProfileState extends State<Profile> {
             height: 16,
           ),
           ElevatedButton(
-            onPressed: () {
-              Future<void> logout() async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                await prefs.clear();
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.clear();
+
+              // Display the "Logout Successfully" SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Logout Successfully'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ));
+
+              // Redirect to LoginScreen
+              Future.delayed(Duration(seconds: 2), () {
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => LoginScreen()));
-              }
+              });
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.dangerColor,

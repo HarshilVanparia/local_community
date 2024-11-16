@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (_formKey.currentState!.validate() && _imageFile != null) {
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://192.168.43.217:3000/register'),
+        Uri.parse('http://192.168.171.196:3000/register'),
       );
 
       request.fields['uname'] = _unameController.text;
@@ -218,7 +218,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ? FileImage(_imageFile!)
                                 : null,
                             child: _imageFile == null
-                                ? Icon(Icons.camera_alt, size: 50)
+                                ? Icon(
+                                    Icons.image_rounded,
+                                    size: 50,
+                                    color: AppColors.backgroundColor,
+                                  )
                                 : null,
                           ),
                         ),
