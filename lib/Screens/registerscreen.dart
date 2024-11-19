@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/loginscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -39,48 +39,79 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+// register route
   Future<void> _registerUser() async {
     if (_formKey.currentState!.validate() && _imageFile != null) {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('http://192.168.171.196:3000/register'),
-      );
+      try {
+        var request = http.MultipartRequest(
+          'POST',
+          Uri.parse('http://192.168.171.243:3000/register'),
+        );
 
-      request.fields['uname'] = _unameController.text;
-      request.fields['email'] = _emailController.text;
-      request.fields['unumber'] = _unumberController.text;
-      request.fields['country'] = _countryController.text;
-      request.fields['city'] = _cityController.text;
-      request.fields['address'] = _addressController.text;
-      request.fields['upassword'] = _passwordController.text;
-      request.files.add(
-        await http.MultipartFile.fromPath('photo_path', _imageFile!.path),
-      );
+        request.fields['uname'] = _unameController.text;
+        request.fields['email'] = _emailController.text;
+        request.fields['unumber'] = _unumberController.text;
+        request.fields['country'] = _countryController.text;
+        request.fields['city'] = _cityController.text;
+        request.fields['address'] = _addressController.text;
+        request.fields['upassword'] = _passwordController.text;
+        request.files.add(
+          await http.MultipartFile.fromPath('photo_path', _imageFile!.path),
+        );
 
-      var response = await request.send();
-      if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Registration successful'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 2),
-        ));
+        var response = await request.send();
+        var responseData = await http.Response.fromStream(response);
+        var json = jsonDecode(responseData.body);
 
-        // Redirect to LoginScreen
-        Future.delayed(Duration(seconds: 2), () {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => LoginScreen()));
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Failed to register'),
-          backgroundColor: Colors.red,
-        ));
+        if (response.statusCode == 201) {
+          // Success: Registration completed
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(json['message']),
+              backgroundColor: Colors.green,
+            ),
+          );
+
+          // Redirect to LoginScreen
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
+          });
+        } else if (response.statusCode == 409) {
+          // Email already registered
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(json['message']),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else {
+          // General failure
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to register. Try again later.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('An unexpected error occurred'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        print('Error: $e');
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Please fill all fields and select an image'),
-        backgroundColor: Colors.red,
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill all fields and select an image'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 // end

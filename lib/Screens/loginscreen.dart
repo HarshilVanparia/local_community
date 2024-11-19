@@ -23,17 +23,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   // checking if user already logged in or not
-  void _checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  // void _checkLoginStatus() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-    if (isLoggedIn) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-      );
-    }
-  }
+  //   if (isLoggedIn) {
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => HomeScreen()),
+  //     );
+  //   }
+  // }
 
   Future<void> _login() async {
     String email = _emailController.text;
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       var response = await http.post(
-        Uri.parse('http://192.168.171.196:3000/login'),
+        Uri.parse('http://192.168.171.243:3000/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'upassword': password}),
       );
@@ -59,21 +59,19 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response.statusCode == 200) {
         var responseData = jsonDecode(response.body);
 
+        // Check if all required fields are present
         if (responseData.containsKey('uname') &&
             responseData.containsKey('email') &&
-            responseData.containsKey('address') &&
             responseData.containsKey('photo_path')) {
           String uname = responseData['uname'];
           String email = responseData['email'];
-          String address = responseData['address'];
           String photoPath = responseData['photo_path'];
 
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('uname', uname);
-          await prefs.setString('email', email);
-          await prefs.setString('address', address);
-          await prefs.setString('photo_path', photoPath);
-          await prefs.setBool('isLoggedIn', true);
+          await prefs.setString('username', uname); // Save Username
+          await prefs.setString('useremail', email); // Save Email
+          await prefs.setString('userphoto', photoPath); // Save Photo Path
+          await prefs.setBool('isLoggedIn', true); // Track login state
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -83,6 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           );
 
+          // Navigate to HomeScreen
           Future.delayed(Duration(seconds: 2), () {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => HomeScreen()));

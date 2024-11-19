@@ -272,14 +272,6 @@ class Categories_List extends StatelessWidget {
 
 // Section Community Posts
 class Community_Posts extends StatelessWidget {
-  // final List<Map<String, dynamic>> tags = [
-  //   {"text": "#ESP32"},
-  //   {"text": "#Iot"},
-  //   {"text": "#Circuit"},
-  //   {"text": "#Android"},
-  //   {"text": "#AndroidStudio"},
-  //   {"text": "#ESP32Module"},
-  // ];
   final String userName;
   final String userAvatar;
   final String postImage;
@@ -718,8 +710,6 @@ class ProductCard extends StatelessWidget {
 }
 // Product Card End
 
-
-
 // Register Fields Resuable
 
 class CustomTextField extends StatelessWidget {
@@ -740,7 +730,8 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.controller,
     this.suffixIcon,
-    this.onSuffixIconPressed, required String? Function(dynamic value) validator,
+    this.onSuffixIconPressed,
+    required String? Function(dynamic value) validator,
   });
 
   @override
@@ -774,3 +765,51 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
+ // Padding(
+                                    //   padding: const EdgeInsets.all(12.0),
+                                    //   child: TextField(
+                                    //     decoration: InputDecoration(
+                                    //         border: OutlineInputBorder(
+                                    //             borderRadius:
+                                    //                 BorderRadius.circular(12)),
+                                    //         hintText: AppTitles.comment,
+                                    //         hintStyle: TextStyle(
+                                    //             color: const Color.fromARGB(
+                                    //                 140, 4, 6, 31),
+                                    //             fontWeight: FontWeight.bold)),
+                                    //     style:
+                                    //         TextStyle(color: AppColors.graybox),
+                                    //     onSubmitted: (value) {
+                                    //       // Add your logic here to handle the submitted value
+                                    //     },
+                                    //   ),
+                                    // ),
+                                    // SizedBox(
+                                    //   height: 4,
+                                    // ),
+                                    // Container(
+                                    //   height: 150,
+                                    //   padding: EdgeInsets.symmetric(
+                                    //       horizontal: 12, vertical: 8),
+                                    //   margin: EdgeInsets.symmetric(
+                                    //       horizontal: 12, vertical: 4),
+                                    //   decoration: BoxDecoration(
+                                    //       color: AppColors.primaryColor,
+                                    //       border: Border.all(
+                                    //           width: 2,
+                                    //           color: AppColors.primaryColor),
+                                    //       borderRadius:
+                                    //           BorderRadius.circular(12)),
+                                    //   child: SingleChildScrollView(
+                                    //     scrollDirection: Axis.vertical,
+                                    //     child: Text(
+                                    //       postTitle.postcomments,
+                                    //       textAlign: TextAlign.justify,
+                                    //       style: TextStyle(
+                                    //           fontSize: 16,
+                                    //           wordSpacing: 1,
+                                    //           color: AppColors.backgroundColor),
+                                    //     ),
+                                    //   ),
+                                    // ),

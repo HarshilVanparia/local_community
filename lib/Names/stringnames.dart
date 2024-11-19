@@ -24,7 +24,7 @@ class AppTitles {
   static const String appTitle = "Local Community";
   static const String explore = "Explore";
   static const String readmore = "Read More";
-  static const String comment = "Comment here...";
+  static const String comment = "Comment solution here...";
   static const String contact = "CONTACT";
 }
 

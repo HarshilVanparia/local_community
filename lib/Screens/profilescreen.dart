@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
@@ -7,9 +5,7 @@ import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/editprofilescreen.dart';
 import 'package:local_community/Screens/loginscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -85,8 +81,7 @@ class _ProfileState extends State<Profile> {
   String? uname;
   String? email;
   String? address;
-  String? photoPath; // Local path of the stored image
-  File? localImageFile; // To store the local image file
+  String? photoPath; // To store the image name from SharedPreferences
   bool isLoading = true;
 
   @override
@@ -101,19 +96,8 @@ class _ProfileState extends State<Profile> {
       uname = prefs.getString('uname');
       email = prefs.getString('email');
       address = prefs.getString('address');
-      photoPath = prefs.getString('photo_path');
+      photoPath = prefs.getString('photo_path'); // Retrieve the image name
     });
-
-    if (photoPath != null) {
-      // Fetch the locally stored image
-      final appDocDir = await getApplicationDocumentsDirectory();
-      final imageFilePath = File('${appDocDir.path}/$photoPath');
-      if (await imageFilePath.exists()) {
-        setState(() {
-          localImageFile = imageFilePath;
-        });
-      }
-    }
 
     setState(() {
       isLoading = false;
@@ -129,16 +113,21 @@ class _ProfileState extends State<Profile> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (localImageFile != null)
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: FileImage(localImageFile!),
-                )
-              else
-                CircleAvatar(
-                  radius: 50,
-                  child: Icon(Icons.person, size: 50),
-                ),
+              photoPath != null
+                  ? CircleAvatar(
+                      radius: 50,
+                      backgroundImage: NetworkImage(
+                        'http://192.168.171.243:3000/uploads/$photoPath',
+                      ),
+                      onBackgroundImageError: (error, stackTrace) {
+                        // Display a placeholder if the image fails to load
+                        print('Error loading profile image: $error');
+                      },
+                    )
+                  : CircleAvatar(
+                      radius: 50,
+                      child: Icon(Icons.person, size: 50),
+                    ),
               SizedBox(
                 height: 12,
               ),

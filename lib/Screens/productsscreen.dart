@@ -13,7 +13,6 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen>{
  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,16 +21,6 @@ class _ProductsScreenState extends State<ProductsScreen>{
           margin: EdgeInsets.fromLTRB(35, 8, 35, 8),
           child: Row(
             children: [
-              // IconButton(
-              //   onPressed: () {
-              //     Navigator.pushReplacement(context,
-              //         MaterialPageRoute(builder: (context) => HomeScreen()));
-              //   },
-              //   icon: Icon(
-              //     Icons.arrow_back,
-              //     color: AppColors.txtColor,
-              //   ),
-              // ),
               Image.asset(
                 logo,
                 width: 50,

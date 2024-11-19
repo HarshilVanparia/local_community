@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
-import 'package:local_community/Screens/productsscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
+import 'package:http/http.dart' as http;
 
 class Categoriesscreen extends StatefulWidget {
   const Categoriesscreen({super.key});
@@ -12,7 +14,31 @@ class Categoriesscreen extends StatefulWidget {
 }
 
 class _CategoriesscreenState extends State<Categoriesscreen> {
- 
+  List<dynamic> categories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCategories();
+  }
+
+  Future<void> fetchCategories() async {
+    final url = Uri.parse(
+        'http://192.168.171.243:3000/getCategories'); // Replace with your API URL
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        setState(() {
+          categories = json.decode(response.body);
+        });
+      } else {
+        throw Exception('Failed to load categories');
+      }
+    } catch (e) {
+      print('Error fetching categories: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,123 +68,87 @@ class _CategoriesscreenState extends State<Categoriesscreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  _buildSectionHeader("Categories"),
                   SizedBox(height: 8),
-                  // Categories_Title(),
-
-                  // Categories Title Start
-                  _buildSectionHeader('Categories'),
-                  // Categories Title End
-
-                  SizedBox(height: 8),
-
-                  // Categories Section Start
-
-                  // Row 1 Start
-                  _buildCategoryCard(
-                    imageAsset1: iot,
-                    title1: categoriesTitles.iot,
-                    onTap1: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductsScreen(),
+                  categories.isEmpty
+                      ? Center(child: Text('No categories found'))
+                      : Container(
+                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount:
+                                  2, // This sets the number of items per row
+                              crossAxisSpacing: 10, // Space between columns
+                              mainAxisSpacing: 10, // Space between rows
+                              childAspectRatio:
+                                  1, // This ensures the items have a square-like appearance
+                            ),
+                            itemCount: categories.length,
+                            itemBuilder: (context, index) {
+                              final category = categories[index];
+                              final photoPath = category['img'];
+                              return Column(
+                                children: [
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: Container(
+                                      width: 150,
+                                      height: 150,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          style: BorderStyle.solid,
+                                          color: AppColors.primaryColor,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceEvenly, // For inside icon & text
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 30, // radius as required
+                                            backgroundColor:
+                                                AppColors.primaryColor,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              child: Image.network(
+                                                'http://192.168.171.243:3000/uploads/$photoPath',
+                                                fit: BoxFit.cover,
+                                                width: 50,
+                                                height: 50,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: Text(
+                                              category['title'],
+                                              style: TextStyle(
+                                                color: AppColors.txtColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         ),
-                      );
-                    },
-                    imageAsset2: ele,
-                    title2: categoriesTitles.ele,
-                    onTap2: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  // Row 1 End
-
-                  // Row 2 Start
-                  _buildCategoryCard(
-                    imageAsset1: circuit,
-                    title1: categoriesTitles.circuit,
-                    onTap1: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductsScreen(),
-                        ),
-                      );
-                    },
-                    imageAsset2: printing,
-                    title2: categoriesTitles.printing,
-                    onTap2: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  // Row 2 End
-
-                  // Row 3 Start
-                  _buildCategoryCard(
-                    imageAsset1: csdesign,
-                    title1: categoriesTitles.design,
-                    onTap1: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductsScreen(),
-                        ),
-                      );
-                    },
-                    imageAsset2: art,
-                    title2: categoriesTitles.art,
-                    onTap2: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  // Row 3 End
-
-                  // Row 4 Start
-                  _buildCategoryCard(
-                    imageAsset1: herb,
-                    title1: categoriesTitles.herbs,
-                    onTap1: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductsScreen(),
-                        ),
-                      );
-                    },
-                    imageAsset2: strip,
-                    title2: categoriesTitles.led,
-                    onTap2: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  // Row 4 End
-
-                  // Categories_Items(),
                   SizedBox(height: 100),
                 ],
               ),
             ),
-          // BottomNavigation
+            // BottomNavigation
             FloatingCircularMenu()
           ],
         ),
@@ -177,7 +167,7 @@ Widget _buildSectionHeader(String title) {
         Text(
           title,
           style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ],
     ),
@@ -185,120 +175,122 @@ Widget _buildSectionHeader(String title) {
 }
 // Section Header for Categories end
 
-// Section Categories Card
-Widget _buildCategoryCard({
-  required String imageAsset1,
-  required String title1,
-  required Function() onTap1,
-  required String imageAsset2,
-  required String title2,
-  required Function() onTap2,
-}) {
-  return Container(
-    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-    child: Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton(
-              onPressed: onTap1,
-              child: Container(
-                width: 150,
-                height: 150,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    style: BorderStyle.solid,
-                    color: AppColors.primaryColor,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceEvenly, // for inside icon & text
-                  children: [
-                    CircleAvatar(
-                      radius: 30, // radius as required
-                      backgroundColor: AppColors.primaryColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Image.asset(
-                          imageAsset1,
-                          fit: BoxFit
-                              .cover, // Ensures the whole image is visible
-                          width: 50, // Adjust based on the size you need
-                          height: 50,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Text(
-                        title1,
-                        style: TextStyle(
-                          color: AppColors.txtColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: onTap2,
-              child: Container(
-                width: 150,
-                height: 150,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    style: BorderStyle.solid,
-                    color: AppColors.primaryColor,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceEvenly, // for inside icon & text
-                  children: [
-                    CircleAvatar(
-                      radius: 30, // radius as required
-                      backgroundColor: AppColors.primaryColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Image.asset(
-                          imageAsset2,
-                          fit: BoxFit
-                              .cover, // Ensures the whole image is visible
-                          width: 50, // Adjust based on the size you need
-                          height: 50,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Text(
-                        title2,
-                        style: TextStyle(
-                          color: AppColors.txtColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ), // row  end
-        SizedBox(
-          height: 20,
-        ),
-      ],
-    ),
-  );
-}
+
+
+// // Section Categories Card
+// Widget _buildCategoryCard({
+//   required String imageAsset1,
+//   required String title1,
+//   required Function() onTap1,
+//   required String imageAsset2,
+//   required String title2,
+//   required Function() onTap2,
+// }) {
+//   return Container(
+//     margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+//     child: Column(
+//       children: [
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             TextButton(
+//               onPressed: onTap1,
+//               child: Container(
+//                 width: 150,
+//                 height: 150,
+//                 decoration: BoxDecoration(
+//                   border: Border.all(
+//                     style: BorderStyle.solid,
+//                     color: AppColors.primaryColor,
+//                     width: 2,
+//                   ),
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//                 child: Column(
+//                   mainAxisAlignment:
+//                       MainAxisAlignment.spaceEvenly, // for inside icon & text
+//                   children: [
+//                     CircleAvatar(
+//                       radius: 30, // radius as required
+//                       backgroundColor: AppColors.primaryColor,
+//                       child: Padding(
+//                         padding: const EdgeInsets.all(12.0),
+//                         child: Image.asset(
+//                           imageAsset1,
+//                           fit: BoxFit
+//                               .cover, // Ensures the whole image is visible
+//                           width: 50, // Adjust based on the size you need
+//                           height: 50,
+//                         ),
+//                       ),
+//                     ),
+//                     Padding(
+//                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
+//                       child: Text(
+//                         title1,
+//                         style: TextStyle(
+//                           color: AppColors.txtColor,
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 18,
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//             TextButton(
+//               onPressed: onTap2,
+//               child: Container(
+//                 width: 150,
+//                 height: 150,
+//                 decoration: BoxDecoration(
+//                   border: Border.all(
+//                     style: BorderStyle.solid,
+//                     color: AppColors.primaryColor,
+//                     width: 2,
+//                   ),
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//                 child: Column(
+//                   mainAxisAlignment:
+//                       MainAxisAlignment.spaceEvenly, // for inside icon & text
+//                   children: [
+//                     CircleAvatar(
+//                       radius: 30, // radius as required
+//                       backgroundColor: AppColors.primaryColor,
+//                       child: Padding(
+//                         padding: const EdgeInsets.all(12.0),
+//                         child: Image.asset(
+//                           imageAsset2,
+//                           fit: BoxFit
+//                               .cover, // Ensures the whole image is visible
+//                           width: 50, // Adjust based on the size you need
+//                           height: 50,
+//                         ),
+//                       ),
+//                     ),
+//                     Padding(
+//                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
+//                       child: Text(
+//                         title2,
+//                         style: TextStyle(
+//                           color: AppColors.txtColor,
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 18,
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ), // row  end
+//         SizedBox(
+//           height: 20,
+//         ),
+//       ],
+//     ),
+//   );
+// }
