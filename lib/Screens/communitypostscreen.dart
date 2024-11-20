@@ -46,7 +46,7 @@ class _CommunityPostScreenState extends State<CommunityPostScreen> {
   Future<void> fetchPosts() async {
     try {
       final response =
-          await http.get(Uri.parse('http://192.168.171.243:3000/getPosts'));
+          await http.get(Uri.parse('http://192.168.43.150:3000/getPosts'));
 
       if (response.statusCode == 200) {
         // Ensure the response is valid and the data is a List
@@ -79,7 +79,7 @@ class _CommunityPostScreenState extends State<CommunityPostScreen> {
   Future<void> _fetchComments(int postId) async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.171.243:3000/comments/$postId'));
+          .get(Uri.parse('http://192.168.43.150:3000/comments/$postId'));
       if (response.statusCode == 200) {
         setState(() {
           comments[postId] = json.decode(response.body)['comments'];
@@ -101,7 +101,7 @@ class _CommunityPostScreenState extends State<CommunityPostScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.171.243:3000/add-comment'),
+        Uri.parse('http://192.168.43.150:3000/add-comment'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'postid': postId,
@@ -177,14 +177,14 @@ class _CommunityPostScreenState extends State<CommunityPostScreen> {
                                     ListTile(
                                       leading: CircleAvatar(
                                         backgroundImage: NetworkImage(
-                                          'http://192.168.171.243:3000/uploads/${post['userphoto']}',
+                                          'http://192.168.43.150:3000/uploads/${post['userphoto']}',
                                         ),
                                       ),
                                       title: Text(
                                           post['username'] ?? 'Unknown User'),
                                     ),
                                     Image.network(
-                                      'http://192.168.171.243:3000/uploads/${post['pimg']}',
+                                      'http://192.168.43.150:3000/uploads/${post['pimg']}',
                                       width: double.infinity,
                                       fit: BoxFit.cover,
                                       height: 300,
@@ -276,7 +276,7 @@ class _CommunityPostScreenState extends State<CommunityPostScreen> {
                                             return ListTile(
                                               leading: CircleAvatar(
                                                 backgroundImage: NetworkImage(
-                                                    'http://192.168.171.243:3000/uploads/${comment['userphoto']}'),
+                                                    'http://192.168.43.150:3000/uploads/${comment['userphoto']}'),
                                               ),
                                               title: Text(comment['username'] ??
                                                   'Anonymous'),

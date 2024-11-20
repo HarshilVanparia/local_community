@@ -85,18 +85,18 @@ class UploadProduct extends StatefulWidget {
 }
 
 class _UploadProductState extends State<UploadProduct> {
-  String? selectedCategory;
-  String? selectedItem; // For predefined categories
-  bool isCustomCategory = false; // Toggle for custom category
-  List<dynamic> categories = [];
-  final customTitleController = TextEditingController();
-  final customImageController = TextEditingController();
-  final productTitleController = TextEditingController();
-  final productDetailsController = TextEditingController();
-  final brandNameController = TextEditingController();
+  final TextEditingController productTitleController = TextEditingController();
+  final TextEditingController productDetailsController =
+      TextEditingController();
+  final TextEditingController brandNameController = TextEditingController();
+  final TextEditingController customTitleController = TextEditingController();
+
   final ImagePicker _picker = ImagePicker();
   File? _imageFile;
   String? customImagePath;
+  List categories = [];
+  String? selectedCategory;
+  bool isCustomCategory = false;
 
   @override
   void initState() {
@@ -105,137 +105,62 @@ class _UploadProductState extends State<UploadProduct> {
   }
 
   Future<void> loadData() async {
-    await fetchCategories();
+    try {
+      await fetchCategories();
+    } catch (e) {
+      print('Error loading data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error loading categories. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> fetchCategories() async {
-    const url = 'http://192.168.171.243:3000/getCategories'; // API URL
+    const url = 'http://192.168.43.150:3000/getCategories';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         setState(() {
-          categories = json.decode(response.body);
+          categories = json.decode(response.body) as List;
         });
       } else {
         throw Exception('Failed to load categories');
       }
     } catch (e) {
       print('Error fetching categories: $e');
-    }
-  }
-
-  Future<void> submitProduct() async {
-    final productTitle = productTitleController.text.trim();
-    final productDetails = productDetailsController.text.trim();
-    final brandName = brandNameController.text.trim();
-
-    if (productTitle.isEmpty || productDetails.isEmpty || brandName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('All fields (title, details, brand) are required'),
+          content: Text('Failed to fetch categories. Please try again.'),
           backgroundColor: Colors.red,
         ),
-      );
-      return;
-    }
-
-    if (_imageFile == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please select an image for the product'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    if (isCustomCategory) {
-      if (customTitleController.text.isEmpty || customImagePath == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Custom category title and image are required'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      final newCategory = {
-        'title': customTitleController.text,
-        'img': customImagePath,
-      };
-
-      try {
-        final categoryResponse = await http.post(
-          Uri.parse('http://192.168.171.243:3000/addCategory'),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode(newCategory),
-        );
-
-        if (categoryResponse.statusCode == 201) {
-          final categoryData = json.decode(categoryResponse.body);
-          final customCategoryId = categoryData['categoryId'];
-          print('Custom category added: $customCategoryId');
-
-          await submitProductToDatabase(
-            productTitle: productTitle,
-            productDetails: productDetails,
-            brandName: brandName,
-            categoryId: customCategoryId,
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Failed to add custom category.'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error adding custom category: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } else {
-      if (selectedCategory == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Please select a predefined category'),
-            backgroundColor: Colors.red,
-          ),
-        );
-        return;
-      }
-
-      await submitProductToDatabase(
-        productTitle: productTitle,
-        productDetails: productDetails,
-        brandName: brandName,
-        categoryId: int.parse(selectedCategory!),
       );
     }
   }
 
+  // Submit product to database with the correct category ID
   Future<void> submitProductToDatabase({
     required String productTitle,
     required String productDetails,
     required String brandName,
     required int categoryId,
+    required String categoryTitle, // added categoryTitle here
   }) async {
     final productData = {
       'product_title': productTitle,
+      'title':
+          categoryTitle, // This ensures the category title is passed correctly
       'pdetails': productDetails,
       'brandName': brandName,
       'categoryId': categoryId,
-      'pimg': _imageFile!.path, // Adjust this if you upload image to a server
+      'pimg': _imageFile!.path,
     };
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.171.243:3000/addProduct'),
+        Uri.parse('http://192.168.43.150:3000/addProduct'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(productData),
       );
@@ -247,7 +172,7 @@ class _UploadProductState extends State<UploadProduct> {
             backgroundColor: Colors.green,
           ),
         );
-
+        // Navigate to product screen
         Future.delayed(Duration(seconds: 2), () {
           Navigator.pushReplacement(
             context,
@@ -256,19 +181,109 @@ class _UploadProductState extends State<UploadProduct> {
         });
       } else {
         final errorResponse = json.decode(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to add product: ${errorResponse['message']}'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        showErrorSnackBar('Failed to add product: ${errorResponse['message']}');
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-          backgroundColor: Colors.red,
-        ),
+      showErrorSnackBar('Error: $e');
+    }
+  }
+
+// Add Custom Category and Submit Product
+  Future<void> addCustomCategoryAndSubmitProduct({
+    required String productTitle,
+    required String productDetails,
+    required String brandName,
+    required Map<String, String> categoryData,
+  }) async {
+    try {
+      // Add custom category to the categories table
+      final response = await http.post(
+        Uri.parse('http://192.168.43.150:3000/addCategory'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(categoryData),
+      );
+
+      if (response.statusCode == 201) {
+        final responseData = json.decode(response.body);
+        final customCategoryId = responseData['categoryId'];
+        final customCategoryTitle = responseData[
+            'categoryTitle']; // Ensure the custom title is returned
+
+        // Add product to the products table with custom category ID
+        await submitProductToDatabase(
+          productTitle: productTitle,
+          productDetails: productDetails,
+          brandName: brandName,
+          categoryId: customCategoryId,
+          categoryTitle: customCategoryTitle, // Pass the category title here
+        );
+      } else {
+        showErrorSnackBar('Failed to add custom category.');
+      }
+    } catch (e) {
+      showErrorSnackBar('Error adding custom category: $e');
+    }
+  }
+
+// Submit Product with Predefined Category
+  Future<void> submitProduct() async {
+    final productTitle = productTitleController.text.trim();
+    final productDetails = productDetailsController.text.trim();
+    final brandName = brandNameController.text.trim();
+
+    // Ensure all required fields are filled
+    if (productTitle.isEmpty || productDetails.isEmpty || brandName.isEmpty) {
+      showErrorSnackBar('All fields (title, details, brand) are required');
+      return;
+    }
+
+    if (_imageFile == null) {
+      showErrorSnackBar('Please select an image for the product');
+      return;
+    }
+
+    String categoryTitle = ''; // Initialize categoryTitle
+
+    if (isCustomCategory) {
+      final customTitle = customTitleController.text.trim();
+      if (customTitle.isEmpty || customImagePath == null) {
+        showErrorSnackBar('Custom category title and image are required');
+        return;
+      }
+
+      // Use customTitleController for custom category title
+      categoryTitle = customTitle;
+
+      final newCategory = {
+        'title': customTitle,
+        'img': customImagePath!,
+      };
+
+      await addCustomCategoryAndSubmitProduct(
+        productTitle: productTitle,
+        productDetails: productDetails,
+        brandName: brandName,
+        categoryData: newCategory,
+      );
+    } else {
+      if (selectedCategory == null) {
+        showErrorSnackBar('Please select a predefined category');
+        return;
+      }
+
+      // Retrieve the category title from the selected category
+      final selectedCategoryTitle = categories.firstWhere(
+        (category) => category['id'].toString() == selectedCategory,
+      )['title'];
+
+      categoryTitle = selectedCategoryTitle; // Set category title
+
+      await submitProductToDatabase(
+        productTitle: productTitle,
+        productDetails: productDetails,
+        brandName: brandName,
+        categoryId: int.parse(selectedCategory!),
+        categoryTitle: categoryTitle, // Pass categoryTitle to the database
       );
     }
   }
@@ -283,24 +298,28 @@ class _UploadProductState extends State<UploadProduct> {
     }
   }
 
+  void showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   Widget buildCategorySelector() {
     if (isCustomCategory) {
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TextField(
             controller: customTitleController,
-            decoration: const InputDecoration(labelText: "Category Title"),
+            decoration: InputDecoration(labelText: "Category Title"),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 12),
           ElevatedButton(
             style: ButtonStyle(
-                padding:
-                    WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 10)),
                 backgroundColor:
-                    WidgetStatePropertyAll(AppColors.backgroundColor)),
+                    MaterialStateProperty.all(AppColors.backgroundColor)),
             onPressed: _pickImage,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -309,12 +328,9 @@ class _UploadProductState extends State<UploadProduct> {
                   Icons.image,
                   color: AppColors.primaryColor,
                 ),
-                SizedBox(width: 8),
                 Text(
                   "Pick Image",
-                  style: TextStyle(
-                    color: AppColors.primaryColor,
-                  ),
+                  style: TextStyle(color: AppColors.primaryColor),
                 ),
               ],
             ),
@@ -323,44 +339,21 @@ class _UploadProductState extends State<UploadProduct> {
         ],
       );
     } else {
-      return Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-        decoration: BoxDecoration(
-            border: Border.all(width: 2, color: AppColors.backgroundColor),
-            color: AppColors.backgroundColor,
-            borderRadius: BorderRadius.circular(6)),
-        child: categories.isEmpty
-            ? Text(
-                "No data") // Show a loading spinner while fetching categories
-            : DropdownButton<String>(
-                iconEnabledColor:
-                    AppColors.primaryColor, // Customize icon color
-                borderRadius: BorderRadius.circular(4),
-                hint: Text(
-                  "Select Category", // Update this with your category title
-                  style: TextStyle(color: AppColors.primaryColor, fontSize: 16),
-                ),
-                style: TextStyle(color: AppColors.primaryColor),
-                isExpanded: true,
-                focusColor: AppColors.primaryColor,
-                dropdownColor: AppColors.backgroundColor,
-                value: selectedItem, // Currently selected item
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedItem = newValue; // Update the selected item
-                  });
-                },
-                items: categories.map((category) {
-                  // Map the categories to the dropdown items
-                  return DropdownMenuItem<String>(
-                    value: category[
-                        'title'], // Assuming category['title'] holds the name
-                    child: Text(category['title']), // Display category title
-                  );
-                }).toList(),
-              ),
+      return DropdownButton<String>(
+        isExpanded: true,
+        value: selectedCategory,
+        hint: Text("Select Category"),
+        onChanged: (value) {
+          setState(() {
+            selectedCategory = value;
+          });
+        },
+        items: categories.map<DropdownMenuItem<String>>((category) {
+          return DropdownMenuItem<String>(
+            value: category['id'].toString(),
+            child: Text(category['title']),
+          );
+        }).toList(),
       );
     }
   }
@@ -421,6 +414,7 @@ class _UploadProductState extends State<UploadProduct> {
                       color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(6)),
                   child: TextField(
+                    controller: productTitleController,
                     decoration: InputDecoration(
                       hintText: productTitle.pname,
                       hintStyle: TextStyle(
@@ -453,7 +447,7 @@ class _UploadProductState extends State<UploadProduct> {
                   children: [
                     Column(
                       children: [
-                        Radio<bool>(
+                        Radio(
                           value: false,
                           groupValue: isCustomCategory,
                           onChanged: (value) {
@@ -467,7 +461,7 @@ class _UploadProductState extends State<UploadProduct> {
                     ),
                     Column(
                       children: [
-                        Radio<bool>(
+                        Radio(
                           value: true,
                           groupValue: isCustomCategory,
                           onChanged: (value) {
@@ -509,6 +503,7 @@ class _UploadProductState extends State<UploadProduct> {
                       color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(6)),
                   child: TextField(
+                    controller: productDetailsController,
                     decoration: InputDecoration(
                       hintText: 'Enter ' + productTitle.pdescript,
                       hintStyle: TextStyle(
@@ -593,6 +588,7 @@ class _UploadProductState extends State<UploadProduct> {
                       color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(6)),
                   child: TextField(
+                    controller: brandNameController,
                     decoration: InputDecoration(
                       hintText: 'Enter ' + productTitle.brand + ' Name',
                       hintStyle: TextStyle(
