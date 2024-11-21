@@ -24,7 +24,7 @@ class _CategoriesscreenState extends State<Categoriesscreen> {
 
   Future<void> fetchCategories() async {
     final url = Uri.parse(
-        'http://192.168.43.150:3000/getCategories'); // Replace with your API URL
+        'http://192.168.171.9:3000/getCategories'); // Replace with your API URL
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -116,7 +116,7 @@ class _CategoriesscreenState extends State<Categoriesscreen> {
                                               padding:
                                                   const EdgeInsets.all(12.0),
                                               child: Image.network(
-                                                'http://192.168.43.150:3000/uploads/$photoPath',
+                                                'http://192.168.171.9:3000/uploads/$photoPath',
                                                 fit: BoxFit.cover,
                                                 width: 50,
                                                 height: 50,

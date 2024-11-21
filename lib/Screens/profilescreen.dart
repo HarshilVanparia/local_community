@@ -6,6 +6,7 @@ import 'package:local_community/Screens/editprofilescreen.dart';
 import 'package:local_community/Screens/loginscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:http/http.dart' as http;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -90,19 +91,37 @@ class _ProfileState extends State<Profile> {
     _loadUserProfile();
   }
 
-  Future<void> _loadUserProfile() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      uname = prefs.getString('uname');
-      email = prefs.getString('email');
-      address = prefs.getString('address');
-      photoPath = prefs.getString('photo_path'); // Retrieve the image name
-    });
+Future<void> _loadUserProfile() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    setState(() {
-      isLoading = false;
-    });
+  setState(() {
+    uname = prefs.getString('uname');
+    email = prefs.getString('email');
+    address = prefs.getString('address');
+    photoPath = prefs.getString('photo_path');
+  });
+
+  setState(() {
+    isLoading = false;
+  });
+}
+
+
+  void showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
   }
+  // Future<void> _loadUserProfile() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     uname = prefs.getString('uname') ?? 'Username not found';
+  //     email = prefs.getString('email') ?? 'Email not found';
+  //     address = prefs.getString('address') ?? 'Address not found';
+  //     photoPath = prefs.getString('photo_path');
+  //     isLoading = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +136,7 @@ class _ProfileState extends State<Profile> {
                   ? CircleAvatar(
                       radius: 50,
                       backgroundImage: NetworkImage(
-                        'http://192.168.43.150:3000/uploads/$photoPath',
+                        'http://192.168.171.9:3000/uploads/$photoPath',
                       ),
                       onBackgroundImageError: (error, stackTrace) {
                         // Display a placeholder if the image fails to load

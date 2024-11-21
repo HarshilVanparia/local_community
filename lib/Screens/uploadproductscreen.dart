@@ -119,7 +119,7 @@ class _UploadProductState extends State<UploadProduct> {
   }
 
   Future<void> fetchCategories() async {
-    const url = 'http://192.168.43.150:3000/getCategories';
+    const url = 'http://192.168.171.9:3000/getCategories';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -160,7 +160,7 @@ class _UploadProductState extends State<UploadProduct> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.43.150:3000/addProduct'),
+        Uri.parse('http://192.168.171.9:3000/addProduct'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(productData),
       );
@@ -188,26 +188,38 @@ class _UploadProductState extends State<UploadProduct> {
     }
   }
 
-// Add Custom Category and Submit Product
   Future<void> addCustomCategoryAndSubmitProduct({
     required String productTitle,
     required String productDetails,
     required String brandName,
     required Map<String, String> categoryData,
   }) async {
+    // Ensure customTitleController.text and customImagePath are not null or empty
+    final customTitle = customTitleController.text.trim();
+    if (customTitle.isEmpty) {
+      showErrorSnackBar('Custom category title is required');
+      return;
+    }
+
+    if (customImagePath == null || customImagePath!.isEmpty) {
+      showErrorSnackBar('Custom category image is required');
+      return;
+    }
+
     try {
       // Add custom category to the categories table
       final response = await http.post(
-        Uri.parse('http://192.168.43.150:3000/addCategory'),
+        Uri.parse('http://192.168.171.9:3000/addCategory'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(categoryData),
+        body: json.encode({
+          'title': customTitle,
+          'img': customImagePath!,
+        }),
       );
 
       if (response.statusCode == 201) {
         final responseData = json.decode(response.body);
         final customCategoryId = responseData['categoryId'];
-        final customCategoryTitle = responseData[
-            'categoryTitle']; // Ensure the custom title is returned
 
         // Add product to the products table with custom category ID
         await submitProductToDatabase(
@@ -215,7 +227,7 @@ class _UploadProductState extends State<UploadProduct> {
           productDetails: productDetails,
           brandName: brandName,
           categoryId: customCategoryId,
-          categoryTitle: customCategoryTitle, // Pass the category title here
+          categoryTitle: customTitle, // Pass the custom category title
         );
       } else {
         showErrorSnackBar('Failed to add custom category.');

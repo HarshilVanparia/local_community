@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/homescreen.dart';
+import 'package:local_community/Screens/profilescreen.dart';
 import 'package:local_community/Screens/registerscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
 import 'package:http/http.dart' as http;
@@ -19,98 +20,57 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _isObscured = true;
   // Tracks the visibility state of the password
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  // checking if user already logged in or not
-  // void _checkLoginStatus() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  Future<void> loginUser() async {
+  try {
+    final response = await http.post(
+      Uri.parse('http://192.168.171.9:3000/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'email': emailController.text.trim(),
+        'upassword': passwordController.text.trim(),
+      }),
+    );
 
-  //   if (isLoggedIn) {
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => HomeScreen()),
-  //     );
-  //   }
-  // }
+    if (response.statusCode == 200) {
+      final userData = json.decode(response.body);
+      print('Received user data from API: $userData');
 
-  Future<void> _login() async {
-    String email = _emailController.text;
-    String password = _passwordController.text;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (email.isEmpty || password.isEmpty) {
+      // Save user data to SharedPreferences
+      await prefs.setInt('userid', userData['userid']);
+      await prefs.setString('uname', userData['uname']);
+      await prefs.setString('email', userData['email']);
+      await prefs.setString('photo_path', userData['photo_path']);
+
+      print('User data saved successfully to SharedPreferences.');
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please enter all fields'),
-          backgroundColor: Colors.red,
-        ),
+        SnackBar(content: Text("Success"), backgroundColor: Colors.green),
       );
-      return;
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ProfileScreen()),
+      );
+    } else if (response.statusCode == 401) {
+      showErrorSnackBar('Invalid email or password');
+    } else {
+      showErrorSnackBar('Login failed: ${response.body}');
     }
+  } catch (e) {
+    showErrorSnackBar('Error: $e');
+  }
+}
 
-    try {
-      var response = await http.post(
-        Uri.parse('http://192.168.43.150:3000/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email, 'upassword': password}),
-      );
 
-      if (response.statusCode == 200) {
-        var responseData = jsonDecode(response.body);
-
-        // Check if all required fields are present
-        if (responseData.containsKey('uname') &&
-            responseData.containsKey('email') &&
-            responseData.containsKey('photo_path')) {
-          String uname = responseData['uname'];
-          String email = responseData['email'];
-          String photoPath = responseData['photo_path'];
-
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('username', uname); // Save Username
-          await prefs.setString('useremail', email); // Save Email
-          await prefs.setString('userphoto', photoPath); // Save Photo Path
-          await prefs.setBool('isLoggedIn', true); // Track login state
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Login successful'),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          );
-
-          // Navigate to HomeScreen
-          Future.delayed(Duration(seconds: 2), () {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => HomeScreen()));
-          });
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Unexpected response format. Please try again.'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Login failed. Please check your credentials.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error occurred during login. Please try again.'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      print('Error: $e');
-    }
+  void showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
   }
 
   @override
@@ -157,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                           height: 18), // Space before the first input field
                       CustomTextField(
-                        controller: _emailController,
+                        controller: emailController,
                         hintText: "Email",
                         borderColor: AppColors.txtColor,
                         keyboardType: TextInputType.emailAddress,
@@ -166,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 18), // Space between input fields
                       CustomTextField(
-                        controller: _passwordController,
+                        controller: passwordController,
                         hintText: "Password",
                         borderColor: AppColors.txtColor,
                         keyboardType: TextInputType.visiblePassword,
@@ -186,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 22), // Space before the submit button
                       ElevatedButton(
-                        onPressed: _login,
+                        onPressed: loginUser,
                         child: Text(
                           "Login",
                           style: TextStyle(
