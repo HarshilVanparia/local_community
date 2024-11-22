@@ -50,9 +50,8 @@ class MainApp extends StatelessWidget {
             foregroundColor: AppColors.backgroundColor),
       ),
       home: Scaffold(
-        body: Center(child: SplashScreen()),
+        body: Center(child: LoginScreen()),
       ),
     );
   }
 }
-

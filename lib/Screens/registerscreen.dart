@@ -19,8 +19,6 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _isObscured = true; // Tracks the visibility state of the password
-  final ImagePicker _picker = ImagePicker();
-  File? _imageFile;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -29,6 +27,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _countryController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+  File? _imageFile;
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -114,7 +114,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
     }
   }
+
 // end
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+
+  Future<void> _googleSignInHandler() async {
+    try {
+      GoogleSignInAccount? user = await _googleSignIn.signIn();
+
+      if (user != null) {
+        // User is signed in successfully
+        String name = user.displayName ?? 'No Name';
+        String email = user.email;
+        String photoUrl = user.photoUrl ?? '';
+        String? idToken =
+            await user.authentication.then((value) => value.idToken);
+
+        // You can send this token to your backend for validation or use it directly
+      } else {
+        // Handle the case where the user cancels the sign-in process
+        print("Google sign-in was canceled");
+      }
+    } catch (e) {
+      print('Error signing in with Google: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +332,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           height: 64,
                           child: IconButton(
                             icon: Image.asset(google),
-                            onPressed: () {},
+                            onPressed: _googleSignInHandler,
                           ),
                         ),
                         SizedBox(

@@ -12,12 +12,13 @@ dependencies:
   circular_menu: ^4.0.0
   auto_size_text: ^3.0.0
   http: ^1.2.2
-  google_sign_in: ^6.2.2
+  google_sign_in: ^5.0.7
   postgres: ^3.4.2
   image_picker: ^1.1.2
   shared_preferences: ^2.3.3
   dio: ^5.7.0
   path_provider: ^2.1.5
+  http_parser: ^4.0.2
 
 dev_dependencies:
   flutter_test:

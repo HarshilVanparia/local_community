@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
@@ -91,37 +90,27 @@ class _ProfileState extends State<Profile> {
     _loadUserProfile();
   }
 
-Future<void> _loadUserProfile() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> _loadUserProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  setState(() {
-    uname = prefs.getString('uname');
-    email = prefs.getString('email');
-    address = prefs.getString('address');
-    photoPath = prefs.getString('photo_path');
-  });
+    setState(() {
+      uname = prefs.getString('uname');
+      email = prefs.getString('email');
+      address = prefs.getString('address');
+      photoPath = prefs.getString('photo_path');
+    });
 
-  setState(() {
-    isLoading = false;
-  });
-}
-
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   void showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
-  // Future<void> _loadUserProfile() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     uname = prefs.getString('uname') ?? 'Username not found';
-  //     email = prefs.getString('email') ?? 'Email not found';
-  //     address = prefs.getString('address') ?? 'Address not found';
-  //     photoPath = prefs.getString('photo_path');
-  //     isLoading = false;
-  //   });
-  // }
+ 
 
   @override
   Widget build(BuildContext context) {

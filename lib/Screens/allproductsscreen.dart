@@ -101,15 +101,15 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
 }
 
 class DProducts extends StatefulWidget {
-  const DProducts({super.key});
+  const DProducts({Key? key}) : super(key: key);
 
   @override
   State<DProducts> createState() => _DProductsState();
 }
 
 class _DProductsState extends State<DProducts> {
-  List<Map<String, dynamic>> _products = []; // Store fetched products
-  String _error = ''; // To store error messages
+  List<Map<String, dynamic>> _products = [];
+  String _error = '';
 
   @override
   void initState() {
@@ -126,7 +126,7 @@ class _DProductsState extends State<DProducts> {
         final data = json.decode(response.body);
         setState(() {
           _products = List<Map<String, dynamic>>.from(data);
-          _error = ''; // Clear any previous errors
+          _error = ''; // Clear errors
         });
       } else {
         setState(() {
@@ -173,7 +173,7 @@ class ProductCard extends StatelessWidget {
   final String price;
   final String imageUrl;
 
-  ProductCard({
+  const ProductCard({
     required this.title,
     required this.price,
     required this.imageUrl,
@@ -192,7 +192,6 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Product Image
           ClipRRect(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(6),

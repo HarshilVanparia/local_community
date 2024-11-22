@@ -113,7 +113,7 @@ class _UploadPostState extends State<UploadPost> {
       final request = http.MultipartRequest(
         'POST',
         Uri.parse(
-            'http://192.168.171.9:3000/uploadPost'), // Update with your server URL
+            'http://192.168.43.113:3000/uploadPost'), // Update with your server URL
       );
 
       request.fields['email'] = email; // Include the email in the request
