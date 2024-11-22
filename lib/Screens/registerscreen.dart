@@ -45,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       try {
         var request = http.MultipartRequest(
           'POST',
-          Uri.parse('http://192.168.171.9:3000/register'),
+          Uri.parse('http://192.168.43.113:3000/register'),
         );
 
         request.fields['uname'] = _unameController.text;

@@ -24,48 +24,52 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   Future<void> loginUser() async {
-  try {
-    final response = await http.post(
-      Uri.parse('http://192.168.171.9:3000/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({
-        'email': emailController.text.trim(),
-        'upassword': passwordController.text.trim(),
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final userData = json.decode(response.body);
-      print('Received user data from API: $userData');
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      // Save user data to SharedPreferences
-      await prefs.setInt('userid', userData['userid']);
-      await prefs.setString('uname', userData['uname']);
-      await prefs.setString('email', userData['email']);
-      await prefs.setString('photo_path', userData['photo_path']);
-
-      print('User data saved successfully to SharedPreferences.');
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Success"), backgroundColor: Colors.green),
+    try {
+      final response = await http.post(
+        Uri.parse('http://192.168.43.113:3000/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'email': emailController.text.trim(),
+          'upassword': passwordController.text.trim(),
+        }),
       );
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => ProfileScreen()),
-      );
-    } else if (response.statusCode == 401) {
-      showErrorSnackBar('Invalid email or password');
-    } else {
-      showErrorSnackBar('Login failed: ${response.body}');
+      if (response.statusCode == 200) {
+        final userData = json.decode(response.body);
+        print('Received user data from API: $userData');
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        // Save user data to SharedPreferences
+        await prefs.setInt('userid', userData['userid']);
+        await prefs.setString('uname', userData['uname']);
+        await prefs.setString('email', userData['email']);
+        await prefs.setString('photo_path', userData['photo_path']);
+
+        print('User data saved successfully to SharedPreferences.');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Success"),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfileScreen()),
+          );
+        });
+      } else if (response.statusCode == 401) {
+        showErrorSnackBar('Invalid email or password');
+      } else {
+        showErrorSnackBar('Login failed: ${response.body}');
+      }
+    } catch (e) {
+      showErrorSnackBar('Error: $e');
     }
-  } catch (e) {
-    showErrorSnackBar('Error: $e');
   }
-}
-
 
   void showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(

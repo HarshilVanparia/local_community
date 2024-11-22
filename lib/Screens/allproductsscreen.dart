@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:local_community/Names/imagenames.dart';
 import 'package:local_community/Names/stringnames.dart';
 import 'package:local_community/Screens/productdetailsscreen.dart';
 import 'package:local_community/Screens/uploadproductscreen.dart';
 import 'package:local_community/Screens/widgetsscreen.dart';
+import 'package:http/http.dart' as http;
 
 class AllProductsScreen extends StatefulWidget {
   const AllProductsScreen({super.key});
@@ -51,18 +54,8 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  DPrinting(),
                   SizedBox(height: 8),
-                  DProdcuts(),
-                  SizedBox(height: 8),
-                  SizedBox(height: 16),
-                  IotProdcutTitle(),
-                  SizedBox(height: 8),
-                  IotProduct(),
-                  SizedBox(height: 16),
-                  CircuitProdcutTitle(),
-                  SizedBox(height: 8),
-                  CircuitProduct(),
+                  DProducts(),
                   SizedBox(height: 16),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 14),
@@ -107,233 +100,67 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
   }
 }
 
-class CircuitProdcutTitle extends StatelessWidget {
-  const CircuitProdcutTitle({
-    super.key,
-  });
+class DProducts extends StatefulWidget {
+  const DProducts({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      //Future Product title Start
-      margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            categoriesTitles.circuit,
-            style: TextStyle(
-                color: AppColors.txtColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
+  State<DProducts> createState() => _DProductsState();
 }
 
-class CircuitProduct extends StatelessWidget {
-  CircuitProduct({
-    super.key,
-  });
-  // Product data
-  final products = [
-    {
-      'title': 'ESP Module',
-      'price': '₹103',
-      'imageUrl': esp32, // First product image
-    },
-    {
-      'title': 'ESP32 Wroom32 ',
-      'price': '₹349',
-      'imageUrl': espwroom, // Second product image
-    },
-    {
-      'title': 'ESP Module',
-      'price': '₹103',
-      'imageUrl': esp32, // Third product image
-    },
-    {
-      'title': 'ESP32 Wroom32 ',
-      'price': '₹349',
-      'imageUrl': espwroom, // Fourth product image
-    },
-  ];
+class _DProductsState extends State<DProducts> {
+  List<Map<String, dynamic>> _products = []; // Store fetched products
+  String _error = ''; // To store error messages
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProductsByCategory("Herbs"); // Default category
+  }
+
+  Future<void> fetchProductsByCategory(String category) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://192.168.43.113:3000/products/$category'),
+      );
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          _products = List<Map<String, dynamic>>.from(data);
+          _error = ''; // Clear any previous errors
+        });
+      } else {
+        setState(() {
+          _error = 'Failed to fetch products: ${response.statusCode}';
+        });
+      }
+    } catch (error) {
+      setState(() {
+        _error = 'Error fetching products: $error';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_error.isNotEmpty) {
+      return Center(child: Text(_error));
+    }
+    if (_products.isEmpty) {
+      return Center(child: Text('No products found'));
+    }
+
     return Container(
       padding: const EdgeInsets.all(8.0),
-      height: 320, // Adjust height to show two products
+      height: 320,
       child: ListView.builder(
-        scrollDirection: Axis.horizontal, // Horizontal scrolling
-        itemCount: products.length, // Number of products in the list
+        scrollDirection: Axis.horizontal,
+        itemCount: _products.length,
         itemBuilder: (context, index) {
-          final product = products[index];
-          return Container(
-            width: 190, // Display 2 at a time
-            height: 100,
-            child: ProductCard(
-              title: product['title']!,
-              price: product['price']!,
-              imageUrl: product['imageUrl']!,
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class IotProdcutTitle extends StatelessWidget {
-  const IotProdcutTitle({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      //Future Product title Start
-      margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            categoriesTitles.iot,
-            style: TextStyle(
-                color: AppColors.txtColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class IotProduct extends StatelessWidget {
-  IotProduct({
-    super.key,
-  });
-  // Product data
-  final products = [
-    {
-      'title': 'HASTHIP',
-      'price': '₹1,999',
-      'imageUrl': futureProduct1, // First product image
-    },
-    {
-      'title': 'Bitdefender',
-      'price': '₹3,199',
-      'imageUrl': futureProduct2, // Second product image
-    },
-    {
-      'title': 'HASTHIP',
-      'price': '₹1,999',
-      'imageUrl': futureProduct1, // Third product image
-    },
-    {
-      'title': 'Bitdefender',
-      'price': '₹3,199',
-      'imageUrl': futureProduct2, // Fourth product image
-    },
-  ];
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      height: 320, // Adjust height to show two products
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal, // Horizontal scrolling
-        itemCount: products.length, // Number of products in the list
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return Container(
-            width: 190, // Display 2 at a time
-            height: 100,
-            child: ProductCard(
-              title: product['title']!,
-              price: product['price']!,
-              imageUrl: product['imageUrl']!,
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class DPrinting extends StatelessWidget {
-  const DPrinting({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      //Future Product title Start
-      margin: EdgeInsets.symmetric(horizontal: 22.0, vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            categoriesTitles.printing,
-            style: TextStyle(
-                color: AppColors.txtColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class DProdcuts extends StatelessWidget {
-  DProdcuts({
-    super.key,
-  });
-  // Product data
-  final products = [
-    {
-      'title': 'M1',
-      'price': '₹290',
-      'imageUrl': product1, // First product image
-    },
-    {
-      'title': 'White Temple',
-      'price': '₹89',
-      'imageUrl': product2, // Second product image
-    },
-    {
-      'title': 'M1',
-      'price': '₹290',
-      'imageUrl': product1, // First product image
-    },
-    {
-      'title': 'White Temple',
-      'price': '₹89',
-      'imageUrl': product2, // Second product image
-    },
-  ];
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      height: 320, // Adjust height to show two products
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal, // Horizontal scrolling
-        itemCount: products.length, // Number of products in the list
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return Container(
-            width: 190, // Display 2 at a time
-            height: 100,
-            child: ProductCard(
-              title: product['title']!,
-              price: product['price']!,
-              imageUrl: product['imageUrl']!,
-            ),
+          final product = _products[index];
+          return ProductCard(
+            title: product['title'] ?? 'No Title',
+            price: product['price'] ?? 'No Price',
+            imageUrl: product['imageurl'] ?? '',
           );
         },
       ),
@@ -355,17 +182,15 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(
-          horizontal: 12, vertical: 8), // Margin between cards
+      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.backgroundColor, // Card background color
-        borderRadius: BorderRadius.circular(8), // Rounded corners
-        border: Border.all(color: AppColors.primaryColor, width: 2),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.blue, width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment:
-            MainAxisAlignment.spaceBetween, // Aligns button at bottom
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Product Image
           ClipRRect(
@@ -373,64 +198,61 @@ class ProductCard extends StatelessWidget {
               topLeft: Radius.circular(6),
               topRight: Radius.circular(6),
             ),
-            child: Image.asset(
-              imageUrl,
-              height: 170, // Adjust the image height
-              fit: BoxFit.fill, // Ensures the image covers the available space
-            ),
+            child: imageUrl.isNotEmpty
+                ? Image.network(
+                    imageUrl,
+                    height: 170,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        Icon(Icons.error, size: 50),
+                  )
+                : Icon(Icons.image_not_supported, size: 170),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Product Title
                 Text(
                   title,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.txtColor,
+                    color: Colors.black,
                   ),
                 ),
-                SizedBox(height: 8), // Space between title and price
-                // Product Price
+                SizedBox(height: 8),
                 Text(
                   price,
                   style: TextStyle(
                     fontSize: 16,
-                    color: AppColors.txtColor,
+                    color: Colors.green,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          // Button
           SizedBox(
             width: double.infinity,
             height: 35,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProductDetailsScreen()));
+                // Navigate to product details screen
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor, // Button color
+                backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(6),
                     bottomRight: Radius.circular(6),
                   ),
                 ),
-                elevation: 2, // Button elevation
               ),
               child: Text(
-                AppTitles.readmore,
+                'Read More',
                 style: TextStyle(
-                  color: AppColors.backgroundColor,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),

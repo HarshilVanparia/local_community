@@ -119,7 +119,7 @@ class _UploadProductState extends State<UploadProduct> {
   }
 
   Future<void> fetchCategories() async {
-    const url = 'http://192.168.171.9:3000/getCategories';
+    const url = 'http://192.168.188.2:3000/getCategories';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -160,7 +160,7 @@ class _UploadProductState extends State<UploadProduct> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.171.9:3000/addProduct'),
+        Uri.parse('http://192.168.188.2:3000/addProduct'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(productData),
       );
@@ -209,7 +209,7 @@ class _UploadProductState extends State<UploadProduct> {
     try {
       // Add custom category to the categories table
       final response = await http.post(
-        Uri.parse('http://192.168.171.9:3000/addCategory'),
+        Uri.parse('http://192.168.188.2:3000/addCategory'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'title': customTitle,

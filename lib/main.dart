@@ -50,7 +50,7 @@ class MainApp extends StatelessWidget {
             foregroundColor: AppColors.backgroundColor),
       ),
       home: Scaffold(
-        body: Center(child: RegisterScreen()),
+        body: Center(child: SplashScreen()),
       ),
     );
   }

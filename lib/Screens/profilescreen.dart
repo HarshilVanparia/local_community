@@ -136,7 +136,7 @@ Future<void> _loadUserProfile() async {
                   ? CircleAvatar(
                       radius: 50,
                       backgroundImage: NetworkImage(
-                        'http://192.168.171.9:3000/uploads/$photoPath',
+                        'http://192.168.43.113:3000/uploads/$photoPath',
                       ),
                       onBackgroundImageError: (error, stackTrace) {
                         // Display a placeholder if the image fails to load
