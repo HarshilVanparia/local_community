@@ -42,6 +42,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+.metadata
+local_community_backend/schema.sql
 
 .env
 node_modules/
